@@ -1,0 +1,36 @@
+---
+title: "Biostatistics Services"
+---
+
+<br><br><br>
+
+<link rel="stylesheet" href="styles.css" type="text/css">
+<link rel="stylesheet" href="site_libs/academicons-1.9.1/css/academicons.min.css"/>
+
+Taehoon Ha, CSHL’s on-site Biostatistician, offers a broad spectrum of statistical consulting services tailored to enhance the research quality and output of CSHL faculty, staff, and students. With an expanded toolkit that now includes R, alongside Python, and the introduction of the advanced software PASS 2024, our biostatistics support is more versatile and capable than ever.
+
+<br>
+
+**Services**
+
++ **Study Design and Power Calculations**: Assistance in designing research studies that are statistically sound and efficient. With the addition of PASS 2024, Biostatistics Core can handle more diverse and complex scenarios for power calculations and sample size justifications, ensuring your study is properly powered to detect significant effects.
+
++ **Selection and Application of Appropriate Statistical Methods**: Guidance on choosing the most suitable statistical methods for your research questions, taking into account the latest advancements in statistical methodologies.
+
++ **Data Analysis**: Offering comprehensive data analysis support, now with the flexibility to perform analyses using Python or R, according to project needs or preferences. Whether you’re looking for a new analysis or a review of existing results, Biostatistics Core is here to help.
+
++ **Customized Statistical Model Development**: Development of tailor-made statistical / ML / DL models to address unique research questions, leveraging the full potential of both Python and R programming languages for bespoke solutions.
+
++ **Data Visualization and Presentation**: Assistance in creating compelling visual representations of your data to effectively communicate your findings to both scientific and general audiences.
+
+<br>
+
+**Service Updates**
+
++ **Python Support**: Responding to the evolving needs of our research community, Biostatistics Core is excited to announce that analysis can now be performed using Python, in addition to R. This expansion allows for greater flexibility and access to a wide array of statistical libraries and tools.
+
++ **PASS 2024**: To ensure our research community has access to the most up-to-date and effective resources for study design, Biostatistics Core has introduced PASS 2024. This advanced software enhances our ability to conduct intricate power calculations and provide precise sample size justifications, accommodating a broader range of research designs and objectives.
+
+<br>
+
+Should you have any additional questions or require further information, please do not hesitate to contact Taehoon directly.

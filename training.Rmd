@@ -1,0 +1,13 @@
+---
+title: "Training"
+---
+
+<br><br><br>
+
+<link rel="stylesheet" href="styles.css" type="text/css">
+<link rel="stylesheet" href="site_libs/academicons-1.9.1/css/academicons.min.css"/>
+
+The Biostatistics Core at Cold Spring Harbor Laboratory is committed to training scientists at every stage of their careers, from students to senior investigators. Our educational activities include:
+
++ **Summer 2024**: [Biostatistics Course 2024](http://taehoonh.me/CSHLbiostat2024/index.html) 
++ **Summer 2023**: [Biostatistics Course 2023](http://taehoonh.me/CSHLbiostat2023/index.html) 
