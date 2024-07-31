@@ -7,10 +7,8 @@ navbar:
     href: services.html
   - text: Training
     menu: 
-    - text: "Biostatistics Course 2024"
-      href: https://taehoonh.me/CSHLbiostat2024/
-    - text: "Biostatistics Course 2023"
-      href: https://taehoonh.me/CSHLbiostat2023/
+    - text: "Biostatistics Course (Summer)"
+      href: biostatistics_course.html
     - text: "Intro to Biostatistics with R"
       href: toc.html
   - text: Communication
