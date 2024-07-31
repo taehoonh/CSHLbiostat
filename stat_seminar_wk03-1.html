@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Week 3-1. Estimate of population proportion</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Cold Spring Harbor Laboratory Biostatistics</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="services.html">Services</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Training
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="biostatistics_course.html">Biostatistics Course</a>
+    </li>
+    <li>
+      <a href="toc.html">Intro to Statistics</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="communication.html">Communication</a>
+</li>
+<li>
+  <a href="https://github.com/taehoonh/CSHLbiostat">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<!-- <link rel="stylesheet" href="styles.css" type="text/css"> -->
+<p><br><br><br></p>
+<p><a href="toc.html">&lt; Back to Syllabus</a></p>
+<p><br><br><br></p>
+<div id="review-binomial-random-variable" class="section level3">
+<h3>1. Review binomial random variable</h3>
+<ul>
+<li>If <span class="math inline">\(Y\)</span> = number of success in
+<span class="math inline">\(n\)</span> independent trials, then <span
+class="math inline">\(Y\)</span> is a <strong><em>binomial random
+variable</em></strong> with <span class="math inline">\(\pi\)</span> =
+probability of success.
+<ul>
+<li><span class="math inline">\(Y~B(n, \pi)\)</span></li>
+<li>PMF of <span class="math inline">\(Y\)</span>:</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+p_{Y}(y)=\sum_{n=0}^{n}\left(\begin{array}{l}n \\ k\end{array}\right)
+\pi(1-\pi) \quad y=0,1, \ldots, n
+\]</span></p>
+<ul>
+<li><ul>
+<li>Expected value of <span class="math inline">\(Y\)</span>, <span
+class="math inline">\(E(Y)\)</span> is determined by</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+p_{Y}(y)=\sum_{n=0}^{n} y \times\left(\begin{array}{l}n \\
+k\end{array}\right) \pi(1-\pi)=n \pi
+\]</span></p>
+<p><br><br></p>
+</div>
+<div id="sample-proportion" class="section level3">
+<h3>2. Sample Proportion</h3>
+<ul>
+<li>The <strong>sample proportion</strong> is a random variable and can
+be defined as:</li>
+</ul>
+<p><span class="math display">\[
+E(P)=E\left(\frac{Y}{n}\right)=\frac{E(Y)}{n}=\frac{n \pi}{n}=\pi
+\]</span></p>
+<ul>
+<li>This is an example of the <strong>method of moments</strong>.</li>
+</ul>
+<p><br></p>
+<blockquote>
+<p><b>Method of Moments</b></p>
+<p>a way of estimating parameters, based on matching a moment of the
+data-generating distribution with the related moment of the empirical
+distribution</p>
+</blockquote>
+<p><br></p>
+<div id="the-maximum-likelihood-estimator-mle" class="section level4">
+<h4>2.1 The Maximum Likelihood Estimator (MLE)</h4>
+<ul>
+<li><strong>Maximum likelihood estimator (MLE)</strong> is the quantity
+that maximizes the <strong>likelihood function</strong>.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="the-likelihood-function" class="section level4">
+<h4>2.2 The Likelihood Function</h4>
+<ul>
+<li>The <strong>likelihood function</strong> is the probability mass
+function (PMF) or density (PDF) evaluated at the data <span
+class="math inline">\(X_1,...,X_n\)</span>, views as a <strong>function
+of the parameter</strong>.
+<ul>
+<li>Assume we have a set of discrete independent and identically
+distributed (i.i.d.) random variable’s, <span
+class="math inline">\(X_1,...,X_n\)</span> whose distribution depends on
+a parameter <span class="math inline">\(\theta\)</span>.</li>
+<li>Denote the PMF of each <span class="math inline">\(X_i\)</span> as
+<span class="math inline">\(p(x \mid \theta)\)</span></li>
+</ul></li>
+<li><ul>
+<li>the likelihood is then</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+L(\theta)=\prod_{i=1}^{n} p\left(x_{i} \mid \theta\right)
+\]</span></p>
+<ul>
+<li>But it is often more useful to compute the log-likelihood
+function:</li>
+</ul>
+<p><span class="math display">\[
+l(\theta)=\sum_{i=1}^{n} \log p\left(x_{i} \mid \theta\right)
+\]</span></p>
+<ul>
+<li>View the above as a <strong>function of the parameter</strong>.
+<ul>
+<li>Thus, it is important to <strong>define the parameter space</strong>
+or <strong>the set of values that a parameter can take</strong>.</li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="example-likelihood-of-a-binomial-sample"
+class="section level4">
+<h4>2.3 Example: Likelihood of a Binomial Sample</h4>
+<p>Suppose that we want to test whether a coin is fair, i.e., if the
+probabilities that it lands on “heads” or “tails” are the same. We can
+flip the coin a few times, say <span class="math inline">\(n=15\)</span>
+and see how many times it give “heads” (<span
+class="math inline">\(x=1\)</span>) or “tails” (<span
+class="math inline">\(x=0\)</span>). Then <span
+class="math inline">\(Y=X_1+...+X_n\)</span> is a **binomial random
+variable, <span class="math inline">\(Y~B(n, \pi)\)</span>.</p>
+<ul>
+<li>More formally, we have a series of i.i.d. Bernoulli random variables
+(which you can think of as a Binomial with <span
+class="math inline">\(n=1\)</span>), <span
+class="math inline">\(X_1,...,X_n\)</span>, such that</li>
+</ul>
+<p><span class="math display">\[
+X_{i} \sim B(1, \pi)
+\]</span></p>
+<ul>
+<li>We don’t know <span class="math inline">\(\pi\)</span> since we
+don’t know whether the coin is fair, but we know the <strong>observed
+values of x_i</strong> in that we performed the experiment.
+<ul>
+<li>We can compute the **likelihood function of the <span
+class="math inline">\(n\)</span> Bernoulli trials:</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+L(\pi)=\prod_{i=1}^{n} \pi^{x_{i}}(1-\pi)^{1-x_{i}}, \quad x_{i}
+\in\{0,1\}
+\]</span></p>
+<ul>
+<li>And the log-likelihood function is</li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned} l(\pi) &amp;=\sum_{i=1}^{n} x_{i} \log
+\pi+\left(1-x_{i}\right) \log (1-\pi) \\ &amp;=n {\log }(1-\pi)+(\log
+\pi-\log (1-\pi)) \sum_{i=1}^{n} x_{i} \end{aligned}
+\]</span></p>
+<ul>
+<li><code>R</code></li>
+</ul>
+<pre class="r"><code>set.seed(1)
+(x &lt;- rbinom(15, size = 1, prob = .5))</code></pre>
+<pre><code>##  [1] 0 0 1 1 0 1 1 1 1 0 0 0 1 0 1</code></pre>
+<pre class="r"><code>loglik &lt;- function(pi, data) {
+    sum(log(dbinom(data, size = 1, prob = pi)))
+}
+
+loglik(pi = .5, data = x) %&gt;% round(3)</code></pre>
+<pre><code>## [1] -10.397</code></pre>
+<pre class="r"><code>loglik(pi = .4, data = x) %&gt;% round(3)</code></pre>
+<pre><code>## [1] -10.906</code></pre>
+<ul>
+<li>Plot the likelihood over a range of <span
+class="math inline">\(\pi\)</span> values</li>
+</ul>
+<pre class="r"><code>pis &lt;- seq(0.1, 0.9, by = 0.01)
+ll &lt;- sapply(pis, loglik, data = x)
+plot(pis, ll, type = &#39;l&#39;, col = 2, lwd = 2,
+     xlab = expression(pi),
+     ylab = &#39;log-likelihood&#39;)</code></pre>
+<p><img src="stat_seminar_wk03-1_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<ul>
+<li>The <strong>maximum likelihood estimator (MLE)</strong> is the
+parameter value that maximizes the likelihood (or log-likelihood)
+function.
+<ul>
+<li>Take the derivative of the log-likelihood function with respect to
+the parameter, <span class="math inline">\(\theta\)</span>.</li>
+<li>Find the value of the parameter for which the derivative = 0.</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned} \frac{d l(\pi)}{d \pi}=&amp; \frac{1}{\pi(1-\pi)}
+\sum_{i=1}^{n} x_{i}-\frac{n}{1-\pi} \\=&amp; \frac{\sum_{i=1}^{n}
+x_{i}-n \pi}{\pi(1-\pi)} \\=&amp; 0 \\ &amp; \hat{\pi}=\frac{1}{n}
+\sum_{i=1}^{n} x_{i} \end{aligned}
+\]</span></p>
+<ul>
+<li><code>R</code></li>
+</ul>
+<pre class="r"><code>plot(pis, ll, type = &#39;l&#39;, col = 2, lwd = 2,
+     xlab = expression(pi),
+     ylab = &#39;log-likelihood&#39;)
+abline(v = mean(x), lty = 2, lwd = 2)</code></pre>
+<p><img src="stat_seminar_wk03-1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><br><br></p>
+</div>
+</div>
+<div id="properties-of-the-estimators" class="section level3">
+<h3>3. Properties of the estimators</h3>
+<div id="properties-of-estimators-bias" class="section level4">
+<h4>3.1 Properties of estimators: Bias</h4>
+<ul>
+<li>An estimator, <span class="math inline">\(\hat{\theta}\)</span>, is
+a random variable for which we can compute mean and variance.</li>
+<li>Can define the <strong>bias of an estimator</strong> as:</li>
+</ul>
+<p><span class="math display">\[
+\operatorname{Bias}=E[\hat{\theta}]-\theta
+\]</span></p>
+<ul>
+<li>An unbiased estimator is when</li>
+</ul>
+<p><span class="math display">\[
+E[\hat{\theta}]=\theta
+\]</span></p>
+<p><br></p>
+</div>
+<div id="mean-squared-error-mse" class="section level4">
+<h4>3.2 Mean Squared Error (MSE)</h4>
+<ul>
+<li>When we <strong>compare two estimators</strong>, we care both
+<strong>bias</strong> and <strong>variance</strong>.</li>
+<li>We may prefer a biased estimator over an unbiased one, if the bias
+estimator has smaller variance.</li>
+<li><strong>Bias-variance tradeoff</strong></li>
+<li>A measure to compare two estimators is the <strong>mean squared
+error (MSE)</strong>, which combines bias and variance.</li>
+</ul>
+<p><span class="math display">\[
+M S
+E[\hat{\theta}]=E\left[(\hat{\theta}-\theta)^{2}\right]=\operatorname{Var}(\hat{\theta})+\operatorname{Bias}(\hat{\theta})^{2}
+\]</span></p>
+<p><br></p>
+</div>
+<div id="consistency" class="section level4">
+<h4>3.3 Consistency</h4>
+<ul>
+<li>An estimator, <span class="math inline">\(\hat{\theta}\)</span>, is
+<strong>consistent</strong>, as <span class="math inline">\(n\)</span>
+goes to infinity, it converges in probability to the true parameter
+value <span class="math inline">\(\theta\)</span>. For any <span
+class="math inline">\(\varepsilon&gt;0\)</span>.
+<ul>
+<li>There are two methods.</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+\begin{array}{c}1) \lim _{n \rightarrow \infty}
+\operatorname{Pr}\left(\left|\hat{\theta}_{n}-\theta\right|&gt;\varepsilon\right)=0
+\\ 2) \lim _{n \rightarrow \infty} M S
+E\left(\hat{\theta}_{n}\right)=0\end{array}
+\]</span></p>
+<p><br></p>
+</div>
+<div id="example-sample-proportion" class="section level4">
+<h4>3.4 Example: sample proportion</h4>
+<ul>
+<li>We know that <span class="math inline">\(E(P)=\pi\)</span>, and this
+is an <strong>unbiased estimator</strong> of <span
+class="math inline">\(\pi\)</span>.</li>
+<li>The <strong>MSE of the sample proportion, P</strong>, can be
+determined.</li>
+<li>We talked about the <span
+class="math inline">\(\operatorname{Var}(P)=\frac{\pi(1-\pi)}{n}\)</span></li>
+</ul>
+<p><span class="math display">\[
+M S
+E(P)=\operatorname{Var}(P)+\operatorname{Bias}(P)^{2}=\frac{\pi(1-\pi)}{n}+0
+\]</span></p>
+<ul>
+<li>This implies that <strong>an estimator of the population proportion
+based on a larger sample size will have a smaller MSE than one based on
+a samller sample size</strong>.</li>
+<li>To determine whether the sample proportion is a <strong>consistent
+estimator</strong> we note that as <span
+class="math inline">\(n\)</span> goes to infinity,</li>
+</ul>
+<p><span class="math display">\[
+M S E\left(P_{n}\right)=\frac{\pi(1-\pi)}{n} \rightarrow 0
+\]</span></p>
+<ul>
+<li>Thus, the sample proportion is consistent.</li>
+</ul>
+<p><br><br></p>
+</div>
+</div>
+<div id="why-confidence-intervals" class="section level3">
+<h3>4. Why Confidence Intervals?</h3>
+<div id="confidence-intervals" class="section level4">
+<h4>4.1 Confidence Intervals</h4>
+<ul>
+<li>Statistics is not only about estimating the unknown quantities in
+the population, but also about <strong>estimating the uncertainty of the
+estimates</strong>.</li>
+<li>Once we have an estimate of our parameter of interest, <span
+class="math inline">\(\hat{\theta}\)</span>, we want to construct a
+range of plausible values for the true value of <span
+class="math inline">\(\theta\)</span>.</li>
+<li>We want to be confident, say at the 95% level, that the true
+parameter lies within a certain range (or interval).</li>
+</ul>
+<p><br></p>
+<blockquote>
+<p><b>Quantiles of the sampling distribution</b></p>
+<ul>
+<li>Use the quantiles of the sampling distribution to compute the
+probability that the parameter lies within the interval.</li>
+</ul>
+<p><span class="math display">\[\operatorname{Pr}\left(q_{0.025} \leq
+\hat{\theta} \leq q_{0.975}\right)=0.95\]</span></p>
+<ul>
+<li>Also we often know the exact or approximate distribution of <span
+class="math inline">\(\hat{\theta}\)</span>. Thus, we can compute the
+qunatiles to obtain the interval.</li>
+</ul>
+</blockquote>
+<p><br></p>
+</div>
+<div id="exact-95-ci-for-the-sample-proportion" class="section level4">
+<h4>4.2 Exact 95% CI for the sample proportion</h4>
+<ul>
+<li><span class="math inline">\(Y~B(n, \pi)\)</span></li>
+<li>Use the quantiles of the sampling distribution of <span
+class="math inline">\(P\)</span> to compute the confidence
+interval.</li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned} 0.95 &amp;=\operatorname{Pr}\left(q_{0.025} \leq P \leq
+q_{0.975}\right) \\ &amp;=\operatorname{Pr}\left(q_{0.025} \leq
+\frac{Y}{n} \leq q_{0.975}\right) \\ &amp;=\operatorname{Pr}\left(n
+q_{0.025} \leq Y \leq n q_{0.975}\right) \end{aligned}
+\]</span></p>
+<ul>
+<li><p><code>R</code>: <code>n*qbinom(0.025, n, $\pi$)</code> to
+<code>n*qbinom(0.975, n, $\pi$)</code></p></li>
+<li><p>To determine the <strong>lower limit</strong> of the confidence
+interval, <span class="math inline">\(P_L\)</span> and the <strong>upper
+limit</strong>, <span class="math inline">\(P_U\)</span> by solving the
+equations below</p></li>
+<li><p>Upper limit:</p></li>
+</ul>
+<p><span class="math display">\[
+\sum_{k=0}^{y}\left(\begin{array}{l}n \\ k\end{array}\right)
+p_{U}^{k}\left(1-p_{U}^{n-k}\right)=\frac{0.05}{2}=0.025
+\]</span></p>
+<ul>
+<li>Lower limit:</li>
+</ul>
+<p><span class="math display">\[
+\sum_{k=0}^{y-1}\left(\begin{array}{l}n \\ k\end{array}\right)
+p_{L}^{k}\left(1-p_{L}^{n-k}\right)=1-\frac{0.05}{2}=0.975
+\]</span></p>
+<ul>
+<li>The interval (<span class="math inline">\(P_L\)</span>, <span
+class="math inline">\(P_U\)</span>) is an exact 100(1-<span
+class="math inline">\(\alpha\)</span>)% CI for <span
+class="math inline">\(P\)</span>.
+<ul>
+<li><span class="math inline">\(\alpha\)</span> = 0.05</li>
+<li><span class="math inline">\(y\)</span> = observed number of
+successes</li>
+<li><span class="math inline">\(n\)</span> = number of trials</li>
+<li><span class="math inline">\(f_u\)</span> = <span
+class="math inline">\(F(y, p_u, n) - \alpha/2\)</span></li>
+<li><span class="math inline">\(f_1\)</span> = <span
+class="math inline">\(F(y-1, p_l, n) - (1-\alpha/2)\)</span></li>
+</ul></li>
+</ul>
+<p><br></p>
+<blockquote>
+<p>F is the cumulative density function (CDF) for the binomial
+distribution.</p>
+</blockquote>
+<p><br></p>
+<ul>
+<li>Find the value of <span class="math inline">\(p_u\)</span> that
+corresponds to <span class="math inline">\(f_u=0\)</span> and the value
+of <span class="math inline">\(p_l\)</span> that corresponds to <span
+class="math inline">\(f_l=0\)</span> using <code>R</code>.</li>
+</ul>
+<pre class="r"><code>ciLimits &lt;- function(y, n, alpha) {
+    fl &lt;- function(p) {
+        pbinom(y - 1, n, p) - (1 - alpha/2)
+    }
+    fu &lt;- function(p) {
+        pbinom(y, n, p) - alpha/2
+    }
+    pl &lt;- uniroot(fl, c(0.01, 0.99))
+    pu &lt;- uniroot(fu, c(0.01, 0.99))
+    return(c(pl$root, pu$root))
+}</code></pre>
+<p><br></p>
+</div>
+<div id="example-number-of-heads-in-15-coin-flips"
+class="section level4">
+<h4>4.3 Example: Number of heads in 15 coin flips</h4>
+<p>Suppose we are interested in determining whether a coin is fair and
+we flip it 15 times. We observe that there were 4 heads observed. +
+Point Estimate: <span class="math inline">\(p=y/n=4/15=0.267\)</span> +
+CI:</p>
+<pre class="r"><code>ciLimits(y = 4, n = 15, alpha = 0.10) %&gt;% round(3)</code></pre>
+<pre><code>## [1] 0.097 0.511</code></pre>
+<ul>
+<li>Conclusion: The 90% confidence interval is 0.097, 0.511. Since the
+interval contains 0.5, the results are consistent with a fair coin.</li>
+<li><code>R binom.test(y, n)</code>
+<ul>
+<li><span class="math inline">\(y\)</span> = observed number of
+successes</li>
+<li><span class="math inline">\(n\)</span> = number of trials.</li>
+</ul></li>
+</ul>
+<pre class="r"><code>binom.test(x = 4, n = 15, conf.level = 0.90)</code></pre>
+<pre><code>## 
+##  Exact binomial test
+## 
+## data:  4 and 15
+## number of successes = 4, number of trials = 15, p-value = 0.1185
+## alternative hypothesis: true probability of success is not equal to 0.5
+## 90 percent confidence interval:
+##  0.09665833 0.51075189
+## sample estimates:
+## probability of success 
+##              0.2666667</code></pre>
+<p><br></p>
+</div>
+<div id="interpretation-of-confidence-interval" class="section level4">
+<h4>4.4 Interpretation of Confidence Interval</h4>
+<ul>
+<li>Be careful in interpreting the result.</li>
+<li><span class="math inline">\(\pi\)</span> is a parameter, not a
+random variable</li>
+<li>The randomness comes from <span class="math inline">\(P\)</span>,
+the sample proportion, which means that the <strong>boundaries of the
+interval are random</strong>.
+<ul>
+<li>Correct: there is a 95% chance the interval contains <span
+class="math inline">\(\pi\)</span></li>
+<li>Incorrect: there is a 95% chance that <span
+class="math inline">\(\pi\)</span> is in the interval.
+<ul>
+<li>This is incorrect because the population proportion is a parameter,
+not a random variable. The value of the population proportion does not
+vary from sample to sample. Only <span class="math inline">\(P\)</span>
+and the <strong>CI</strong> varies from sample to sample.</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="one-sided-confidence-interval" class="section level4">
+<h4>4.5 One-sided Confidence Interval</h4>
+<ul>
+<li>There are two types of intervals: one-sided and two-sided.
+<ul>
+<li>Two-sided intervals have both a lower and upper bound. It usually
+assigns half the <span class="math inline">\(\alpha\)</span> value to
+the lower side and half the <span class="math inline">\(\alpha\)</span>
+to the upper side.</li>
+<li>One-sided intervals is used when we are only interested in either
+the lower or the upper bound. In this case, all of <span
+class="math inline">\(\alpha\)</span> goes to one-side.</li>
+</ul></li>
+<li>e.g. Suppose we wanted to know whether a coin was biased so that the
+probability of heads is greater than 0.50. As before, we flip the coin
+15 times and observe 4 heads. In this case, we would be interested in
+having a lower bound for our confidence interval so we can see if the
+lower bound is greater than 0.50.</li>
+</ul>
+<pre class="r"><code>binom.test(4,15,conf.level=0.90, alternative=&quot;greater&quot;)</code></pre>
+<pre><code>## 
+##  Exact binomial test
+## 
+## data:  4 and 15
+## number of successes = 4, number of trials = 15, p-value = 0.9824
+## alternative hypothesis: true probability of success is greater than 0.5
+## 90 percent confidence interval:
+##  0.1217687 1.0000000
+## sample estimates:
+## probability of success 
+##              0.2666667</code></pre>
+<ul>
+<li><ul>
+<li>Conclusion: We can see that this interval contains 0.50 and this is
+consistent with the coin being fair; there is no evidence that the
+probability of heads is greater than 0.50.</li>
+</ul></li>
+<li>e.g. Suppose we wanted to know whether a coin was biased so that the
+probability of heads is less than 0.50. As before, we flip the coin 15
+times and observe 4 heads. In this case, we would be interested in
+having an upper bound for our confidence interval so we can see if the
+upper bound is less than 0.50.</li>
+</ul>
+<pre class="r"><code>binom.test(4,15,conf.level=0.90, alternative=&quot;less&quot;)</code></pre>
+<pre><code>## 
+##  Exact binomial test
+## 
+## data:  4 and 15
+## number of successes = 4, number of trials = 15, p-value = 0.05923
+## alternative hypothesis: true probability of success is less than 0.5
+## 90 percent confidence interval:
+##  0.0000000 0.4639709
+## sample estimates:
+## probability of success 
+##              0.2666667</code></pre>
+<ul>
+<li><ul>
+<li>Conclusion: We can see that this interval does NOT contains 0.50 and
+this is inconsistent with the coin being fair; there is evidence that
+the probability of heads is less than 0.50.</li>
+</ul></li>
+</ul>
+<p><br><br></p>
+</div>
+</div>
+<div id="normal-distribution-approximation-of-a-binomial-distribution"
+class="section level3">
+<h3>5. Normal distribution approximation of a binomial distribution</h3>
+<ul>
+<li>When <span class="math inline">\(n\)</span>, <span
+class="math inline">\(n \pi\)</span>, and <span
+class="math inline">\(n(1-\pi)\)</span> are sufficiently large, then the
+binomial distribution is well approximated by the normal
+distribution.</li>
+</ul>
+<span class="math display">\[
+B(n, \pi) \sim N(n \pi, \sqrt{n \pi(1-\pi)})
+\]</span>
+</p>
+<p><br></p>
+<pre class="r"><code>plot(0:500, dbinom(0:500, 500, 0.4),
+     type = &quot;h&quot;,
+     col = &quot;blue&quot;,
+     xlab = &quot;number of successes&quot;,
+     ylab = &quot;probability&quot;,
+     main = &quot; Binomial comparison to Normal&quot;)
+lines(0:500, dnorm(0:500, 200, sqrt(500 * 0.4 * 0.6)), lwd = 4, col = &quot;red&quot;)</code></pre>
+<p><img src="stat_seminar_wk03-1_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>plot(180:220, dbinom(180:220, 500, 0.4), type = &quot;h&quot;, col = &quot;blue&quot;, xlab = &quot;number of successes&quot;, 
+    ylab = &quot;probability&quot;, main = &quot; Binomial comparison to Normal&quot;)
+lines(180:220, dnorm(180:220, 200, sqrt(500 * 0.4 * 0.6)), lwd = 4, col = &quot;red&quot;)</code></pre>
+<p><img src="stat_seminar_wk03-1_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<ul>
+<li>The closer <span class="math inline">\(\pi\)</span> is to 0.5, the
+better the normal approximation will be.
+<ul>
+<li>If <span class="math inline">\(n \le 50\)</span>, the approximation
+will not be good</li>
+<li>Rule of thumb: <span class="math inline">\(n \pi(1-\pi) \ge
+10\)</span></li>
+</ul></li>
+</ul>
+<div
+id="implications-for-the-confidence-interval-for-the-sampling-propotion"
+class="section level4">
+<h4>5.1 Implications for the confidence interval for the sampling
+propotion</h4>
+<ul>
+<li>If <span class="math inline">\(n \pi(1-\pi) \ge 10\)</span> (i.e.,
+sufficiently large), the sampling distribution for the sample proportion
+can be approximated by a normal distribution with mean <span
+class="math inline">\(\pi\)</span> and standard deviation of <span
+class="math inline">\(\sqrt{(\pi(1-\pi) / n)}\)</span>.</li>
+<li>So for large <span class="math inline">\(n\)</span> (i.e., <span
+class="math inline">\(n \pi(1-\pi) \ge 10\)</span>), an approximate
+100(1-<span class="math inline">\(\alpha\)</span>)% confidence interval
+for <span class="math inline">\(\pi\)</span>, can be determined with a
+normal distribution.</li>
+</ul>
+</div>
+<div
+id="example-approximation-of-95-confidence-interval-for-the-population-proportion"
+class="section level4">
+<h4>5.2 Example: Approximation of 95% Confidence Interval for the
+population proportion</h4>
+<p><span class="math display">\[
+0.95=\operatorname{Pr}\left(q_{0.025} \leq \frac{p-\pi}{\sqrt{p(1-p) /
+n}} \leq q_{0.975}\right)
+\]</span></p>
+<ul>
+<li>The quantity given above has a standard normal distribution.</li>
+<li><code>R</code></li>
+</ul>
+<pre class="r"><code>qnorm(0.025)</code></pre>
+<pre><code>## [1] -1.959964</code></pre>
+<pre class="r"><code>qnorm(0.975)</code></pre>
+<pre><code>## [1] 1.959964</code></pre>
+<p><span class="math display">\[
+0.95=\operatorname{Pr}\left(p-q_{0.975} \sqrt{p(1-p) / n} \leq \pi \leq
+p+q_{0.975} \sqrt{p(1-p) / n}\right)
+\]</span></p>
+<p><span class="math display">\[
+0.95=\operatorname{Pr}(p-1.96 \sqrt{p(1-p) / n} \leq \pi \leq p+1.96
+\sqrt{p(1-p) / n})
+\]</span></p>
+<ul>
+<li>e.g. Suppose we have a random sample of 500 individuals from a
+population and that 212 of them are obese (e.g. have a BMI &gt;
+30).</li>
+<li>&lt;1&gt; What is an estimate for the proportion of obese
+individuals in this population?</li>
+</ul>
+<pre class="r"><code>binom.test(212, 500, conf.level = 0.90)</code></pre>
+<pre><code>## 
+##  Exact binomial test
+## 
+## data:  212 and 500
+## number of successes = 212, number of trials = 500, p-value = 0.0007798
+## alternative hypothesis: true probability of success is not equal to 0.5
+## 90 percent confidence interval:
+##  0.3870533 0.4616173
+## sample estimates:
+## probability of success 
+##                  0.424</code></pre>
+<ul>
+<li>&lt;2&gt; What is the 90% confidence interval obtained from a normal
+approximation?</li>
+</ul>
+<pre class="r"><code>(lower &lt;- 0.424 - 1.645 * sqrt(0.424 * 0.576 / 500)) %&gt;% round(3)</code></pre>
+<pre><code>## [1] 0.388</code></pre>
+<pre class="r"><code>(upper &lt;- 0.424 + 1.645 * sqrt(0.424 * 0.576 / 500)) %&gt;% round(3)</code></pre>
+<pre><code>## [1] 0.46</code></pre>
+<pre class="r"><code>(test &lt;- prop.test(212, 500, conf.level = 0.90))</code></pre>
+<pre><code>## 
+##  1-sample proportions test with continuity correction
+## 
+## data:  212 out of 500, null probability 0.5
+## X-squared = 11.25, df = 1, p-value = 0.0007962
+## alternative hypothesis: true p is not equal to 0.5
+## 90 percent confidence interval:
+##  0.3871687 0.4616718
+## sample estimates:
+##     p 
+## 0.424</code></pre>
+<ul>
+<li>Using the <code>prop.test()</code> the 90% CI is 0.387, 0.462.</li>
+</ul>
+<p><br></p>
+<blockquote>
+<p><code>R</code> function gives more accurate estimates is that it uses
+a <b>correction for continuity</b>. Specifically the binomial
+distribution is discrete and the normal distribution is continuous so a
+correction is needed to assign the area under the curve (AUC) to each
+mass of the binomial.</p>
+</blockquote>
+<p><br><br><br></p>
+<p><a href="toc.html">&lt; Back to Syllabus</a></p>
+<p><br><br><br></p>
+</div>
+</div>
+
+<br><br>
+<footer>
+  <p class="copyright text-muted" align="center">Copyright &copy; 2024 Cold Spring Harbor Laboratory</p>
+</footer>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

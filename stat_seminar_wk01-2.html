@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Week 1-2. EDA</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Cold Spring Harbor Laboratory Biostatistics</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="services.html">Services</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Training
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="biostatistics_course.html">Biostatistics Course</a>
+    </li>
+    <li>
+      <a href="toc.html">Intro to Statistics</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="communication.html">Communication</a>
+</li>
+<li>
+  <a href="https://github.com/taehoonh/CSHLbiostat">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<p><link rel="stylesheet" href="styles.css" type="text/css">
+<link rel="stylesheet" href="site_libs/academicons-1.9.1/css/academicons.min.css"/>
+<br><br><br><br></p>
+<p><br><br><br></p>
+<p><a href="toc.html">&lt; Back to Syllabus</a></p>
+<p><br><br><br></p>
+<p><br><br><br></p>
+<div id="data" class="section level3">
+<h3>1. Data</h3>
+<p><br></p>
+<div id="data-1" class="section level4">
+<h4>1.1 Data</h4>
+<ul>
+<li><strong>Data</strong> consist of one or more
+<strong>variables</strong> measured / recorded on <strong>observational
+units</strong> in a <strong>population (cf. census)</strong> or
+<strong>sample</strong> of the population of interest.</li>
+</ul>
+<pre><code>## # A tibble: 6 × 6
+##   country     continent  year lifeExp      pop gdpPercap
+##   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+## 1 Afghanistan Asia       1952    28.8  8425333      779.
+## 2 Afghanistan Asia       1957    30.3  9240934      821.
+## 3 Afghanistan Asia       1962    32.0 10267083      853.
+## 4 Afghanistan Asia       1967    34.0 11537966      836.
+## 5 Afghanistan Asia       1972    36.1 13079460      740.
+## 6 Afghanistan Asia       1977    38.4 14880372      786.</code></pre>
+<p>In the example above the variables are <code>country</code>,
+<code>continent</code>, <code>year</code>, <code>lifeExp</code>,
+<code>pop</code>, and <code>gdpPercap</code>.</p>
+<p><br></p>
+</div>
+<div id="variables" class="section level4">
+<h4>1.2 Variables</h4>
+<ul>
+<li><strong>Variable</strong>: characteristics that differ among
+observational units.</li>
+</ul>
+<pre class="r"><code>library(gapminder)
+head(gapminder)</code></pre>
+<pre><code>## # A tibble: 6 × 6
+##   country     continent  year lifeExp      pop gdpPercap
+##   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+## 1 Afghanistan Asia       1952    28.8  8425333      779.
+## 2 Afghanistan Asia       1957    30.3  9240934      821.
+## 3 Afghanistan Asia       1962    32.0 10267083      853.
+## 4 Afghanistan Asia       1967    34.0 11537966      836.
+## 5 Afghanistan Asia       1972    36.1 13079460      740.
+## 6 Afghanistan Asia       1977    38.4 14880372      786.</code></pre>
+<p><br></p>
+</div>
+<div id="quantitative-variables" class="section level4">
+<h4>1.3 Quantitative variables</h4>
+<ul>
+<li><strong>continuous</strong> (i.e., real numbers): any value
+corresponding to the points in an interval (e.g. blood pressure,
+height)</li>
+<li><strong>discrete</strong> (i.e., integers): countable number of
+values (e.g. number of events per year)</li>
+</ul>
+<p>In the dataset above, the <strong>continuous</strong> variables are
+<code>lifeExp</code>, <code>pop</code>, and <code>gdpPercap</code>. The
+<code>year</code> variable could be considered
+<strong>discrete</strong>.</p>
+<p><br></p>
+</div>
+<div id="qualitative-variables" class="section level4">
+<h4>1.4 Qualitative variables</h4>
+<ul>
+<li><strong>nominal</strong>: names or labels, NO natural order (e.g.,
+sex, ethnicity, eye color)</li>
+<li><strong>ordinal</strong>: ordered categories, NO natural numerical
+scale (e.g., muscle tone, tumor grade, New York Heart Association
+class)</li>
+</ul>
+<p>In the dataset above, the qualitative variables are
+<code>country</code> and <code>continent</code>. These are examples of
+<strong>nominal</strong> variables.</p>
+<p><br></p>
+</div>
+<div id="tidy-data" class="section level4">
+<h4>1.5 Tidy Data</h4>
+<ul>
+<li>The concept of tidy data was introduced by Hadley Wickam in his
+seminar paper (Wickam, 2014).</li>
+<li>There are <strong>three fundamental rules</strong> which make a
+dataset tidy:
+<ul>
+<li>1&gt; Each variable must have its own column.</li>
+<li>2&gt; Each observation must have its own row.</li>
+<li>3&gt; Each value must have its own cell.</li>
+</ul></li>
+<li>The <strong>advantage</strong> of tidy data is both conceptual and
+practical:
+<ul>
+<li>1&gt; it allows consistency among datasets and</li>
+<li>2&gt; the use of tools designed for this data structure.</li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="distribution" class="section level4">
+<h4>1.6 Distribution</h4>
+<ul>
+<li><strong>distribution</strong>: <strong>frequencies</strong> of one
+or more (quantitative or qualitative) <strong>variables</strong>
+recorded on units in a population or sample of interest.</li>
+<li><strong>distribution table</strong>: a table of <strong>absolute
+frequencies</strong> (i.e., counts) or <strong>relative
+frequencies</strong> (i.e., percentages) or both for the values taken on
+by the variable(s) in the group of interest.</li>
+<li><strong>population distribution</strong>: distribution of variables
+for the units in a population</li>
+<li><strong>population parameters</strong>: summaries or measures of the
+population distribution.
+<ul>
+<li>Usually the population distribution and population parameters are
+<strong>unknown</strong>.</li>
+</ul></li>
+<li><strong>sample distribution</strong>: distribution of variables for
+the units in a sample</li>
+<li><strong>sample statistics</strong>: summaries or measures computed
+from the sample distribution.
+<ul>
+<li>Usually sample statistics (sample distributions) are used to
+estimate the unknown population parameters (population
+distributions).</li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="numerical-and-graphical-summaries" class="section level4">
+<h4>1.7 Numerical and graphical summaries</h4>
+<ul>
+<li>Often more informative to provide a <strong>summary</strong> of the
+data rather than to look at all the individual values, especially if the
+dataset has more than 10-20 observations.</li>
+<li><strong>data summaries</strong> can be either numerical or graphical
+and allow us to:
+<ul>
+<li>focus on the <strong>main characteristics</strong> of the data.</li>
+<li>reveal <strong>unusual features</strong> of the data.</li>
+<li>summarize <strong>relationship between variables</strong>.</li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="exploratory-data-analysis-eda" class="section level4">
+<h4>1.8 Exploratory Data Analysis (EDA)</h4>
+<ul>
+<li>A key step of nay data analysis and of statistical practice in
+general</li>
+<li>Before formally modeling the data, the dataset must be examined to
+reveal expected and unexpected characteristics of the data.</li>
+<li>Also useful for determining quality issues with the data
+(e.g. missing values, unusual outliers, etc.)</li>
+<li>Also useful to examine the data to check the plausibility of the
+assumptions of candidate statistical models.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="reporting-of-the-results" class="section level4">
+<h4>1.9 Reporting of the results</h4>
+<ul>
+<li>numerical and graphical summaries are also useful for
+<strong>displaying and reporting the results of a statistical
+analysis</strong>.
+<ul>
+<li>e.g. once can report graphical displays of the distribution of the
+estimators,</li>
+<li>or check the residuals of the model, or compare the effect sizes of
+several explanatory variables.</li>
+</ul></li>
+</ul>
+<p><br><br><br></p>
+</div>
+</div>
+<div id="one-variable---graphic-summary" class="section level3">
+<h3>2. One variable - graphic summary</h3>
+<ul>
+<li>histograms</li>
+<li>kernel density plots</li>
+<li>boxplots</li>
+</ul>
+<p><br></p>
+<div id="histograms" class="section level4">
+<h4>2.1 Histograms</h4>
+<ul>
+<li>A <strong>histogram</strong> is used to display variables by
+aggregating similar values into “<strong>bins</strong>” to represent the
+distribution.</li>
+<li>The <strong>width of the bin</strong> is determined by the analyst
+(you) and most software distribution have a default algorithm for
+determining the bin width.</li>
+<li>Once the bin width is determined, the number of observations (or the
+proportion of observations) that fall within that interval is computed
+and graphed.</li>
+<li>The procedures are:
+<ul>
+<li>1&gt; partition the real line into intervals
+(<strong>bins</strong>).</li>
+<li>2&gt; assign each observation to its bin depending on its numerical
+values.</li>
+<li>3&gt; count the number of observations in each bin (or determine the
+proportion of values within each bin).</li>
+</ul></li>
+<li>A <strong>frequency histogram</strong> reports the counts in each
+bin.</li>
+<li>A <strong>relative frequency histogram</strong> reports the
+proportion of observations within each bin.</li>
+</ul>
+<blockquote>
+<ul>
+<li>Relative frequency histograms are more useful when comparing
+histograms from samples of different sample sizes. (서로 다른 n을 가진
+샘플들 간의 비교 시에 더 용이함)</li>
+</ul>
+</blockquote>
+<p><br></p>
+<div id="example-life-expectancy" class="section level5">
+<h5>2.1.1 Example: Life expectancy</h5>
+<pre class="r"><code>hist(gapminder$lifeExp, main = &quot;Frequency Histogram&quot;, xlab = &quot;Life Expectancy (years)&quot;)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>hist(gapminder$lifeExp, main = &quot;Relative Frequency Histogram&quot;, freq = FALSE, xlab = &quot;Life Expectancy (years)&quot;)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<blockquote>
+<ul>
+<li>Using <code>freq = FALSE</code> option, a frequency histogram can be
+converted into a relative frequency histogram easily.<br />
+</li>
+<li>The only difference between these two histograms is the y-axis (and
+the title). The shape and bins remain the same.</li>
+<li>The proportions of the observations in each bin adds to 1 in a
+relative frequency histogram.</li>
+</ul>
+</blockquote>
+<p><br></p>
+</div>
+<div id="how-to-choose-the-bins" class="section level5">
+<h5>2.1.2 How to choose the bins</h5>
+<ul>
+<li>The histogram representation of the data depends on <strong>two
+critical chocies</strong>:
+<ul>
+<li>The number of bins or the bin width (knowing one defines the other
+if the bin widths are equal in size)</li>
+<li>The location of the bin boundaries (important if the bin widths are
+not of equal size)</li>
+</ul></li>
+</ul>
+<blockquote>
+<ul>
+<li>Note that <strong>the number of bins</strong> in the histogram
+controls the amount of <strong>infomration loss</strong>:
+<strong><em>the larger the bin width the more information we
+lose</em></strong></li>
+<li>Too many bins do not allow us to identify interesting patterns
+within the data because they get lost in the noise.</li>
+</ul>
+</blockquote>
+<p><br></p>
+</div>
+<div id="example-life-expectancy-1" class="section level5">
+<h5>2.1.3 Example: Life expectancy</h5>
+<ul>
+<li>Use <code>breaks()</code> option to change this.</li>
+<li>The bins don’t correspond to exactly the number you put in, because
+of the way <code>R</code> runs its algorithm to break up the data but it
+gives you generally what you want.</li>
+</ul>
+<pre class="r"><code>par(mfrow = c(2, 2))
+hist(gapminder$lifeExp, breaks = 5, main = &quot;Breaks = 5&quot;, xlab = &quot;Life Expectancy (yrs&quot;)
+hist(gapminder$lifeExp, breaks = 10, main = &quot;Breaks = 10&quot;, xlab = &quot;Life Expectancy (yrs)&quot;)
+hist(gapminder$lifeExp, breaks = 30, main = &quot;Break = 30&quot;, xlab = &quot;Life Expectancy (yrs)&quot;)
+hist(gapminder$lifeExp, breaks = 100, main = &quot;Breaks = 100&quot;, xlab = &quot;Life Expectancy (yrs)&quot;)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><br></p>
+</div>
+<div id="how-to-choose-the-bins-1" class="section level5">
+<h5>2.1.4 How to choose the bins</h5>
+<ul>
+<li><p>Question: whether there is an <strong>optimal number of
+bins</strong>.</p></li>
+<li><p>R’s default is <strong>equi-spaced</strong> breaks in which the
+area of each bin is <strong>proportional</strong> to the number of
+points in each bin.</p>
+<ul>
+<li>But this method is possible to provide unequally spaced breaks.</li>
+<li>R uses <strong>Sturges’ formula</strong>.</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+k=log_2n+1
+\]</span></p>
+<ul>
+<li>The formula above is derived from the binomial coefficient, and
+assumes that the data are approximately normally distributed.</li>
+<li>However, it is known that <strong>Sturges’ rule</strong> lead to
+<strong>over-smoothed</strong> histograms.
+<ul>
+<li>Thus, manually choosing the number of breaks might be beneficial in
+real applications.</li>
+<li>It is often informative to generate several histograms of the data
+with differeing numbers of bins as done in the example above.</li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+</div>
+<div id="density-plot" class="section level4">
+<h4>2.2 Density plot</h4>
+<ul>
+<li><strong>Density plots</strong> are smoothed versions of
+histograms</li>
+<li>obtained using <strong>kernel density estimation</strong>
+methods.</li>
+<li><strong>Kernel density estimators</strong> are defined as:</li>
+</ul>
+<p><span class="math display">\[
+f_{n}(x)=\frac{1}{n h} \sum_{i=1}^{n} K\left(\frac{x-x_{i}}{h}\right)
+\]</span></p>
+<p><br></p>
+<blockquote>
+<ul>
+<li><span class="math inline">\(h\)</span>: <em>bandwidth</em></li>
+<li><span class="math inline">\(K(.)\)</span>: <strong>Kernel
+function</strong> – Usually standard Gaussian density is used as
+kernel</li>
+</ul>
+</blockquote>
+<p><br></p>
+<p><span class="math display">\[
+K(x)=\frac{1}{\sqrt{2 \pi}} e^{-x^{2} / 2}
+\]</span></p>
+<p><br></p>
+<div id="density-plots" class="section level5">
+<h5>2.2.1 Density plots</h5>
+<pre class="r"><code>x &lt;- sort(c(19, 20, 10, 17, 16, 13, 16, 10, 7, 18))
+
+kde &lt;- density(x, kernel = &quot;gaussian&quot;, bw = 2)
+
+A.kernel &lt;- lapply(x, function(i) {
+    density(i, kernel = &quot;gaussian&quot;, bw = 2)
+})
+
+for (i in seq_along(A.kernel)) {
+    A.kernel[[i]][[&quot;y&quot;]] &lt;- A.kernel[[i]][[&quot;y&quot;]]/length(x)
+}</code></pre>
+<pre class="r"><code>plot(x, rep(0, length(x)), col = &quot;red&quot;, pch = 17, xlim = c(min(kde$x), max(kde$x)),
+    ylim = c(0, max(kde$y)), ylab = &quot;Density&quot;, main = &quot;Construction of Kernel Density Estimation&quot;)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>plot(x, rep(0, length(x)), col = &quot;red&quot;, pch = 17, xlim = c(min(kde$x), max(kde$x)),
+    ylim = c(0, max(kde$y)), ylab = &quot;Density&quot;, main = &quot;Construction of Kernel Density Estimation&quot;)
+lines(A.kernel[[1]], col = &quot;red&quot;)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>plot(x, rep(0, length(x)), col = &quot;red&quot;, pch = 17, xlim = c(min(kde$x), max(kde$x)),
+    ylim = c(0, max(kde$y)), ylab = &quot;Density&quot;, main = &quot;Construction of Kernel Density Estimation&quot;)
+
+for (j in c(1, 3)) {
+    lines(A.kernel[[j]], col = &quot;red&quot;)
+}</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>plot(x, rep(0, length(x)), col = &quot;red&quot;, pch = 17, xlim = c(min(kde$x), max(kde$x)),
+    ylim = c(0, max(kde$y)), ylab = &quot;Density&quot;, main = &quot;Construction of Kernel Density Estimation&quot;)
+
+for (j in seq_along(A.kernel)) {
+    lines(A.kernel[[j]], col = &quot;red&quot;)
+}</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre class="r"><code>plot(x, rep(0, length(x)), col = &quot;red&quot;, pch = 17, xlim = c(min(kde$x), max(kde$x)),
+    ylim = c(0, max(kde$y)), ylab = &quot;Density&quot;, main = &quot;Construction of Kernel Density Estimation&quot;)
+
+for (j in seq_along(A.kernel)) {
+    lines(A.kernel[[j]], col = &quot;red&quot;)
+}
+
+lines(kde)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<pre class="r"><code>hist(gapminder$lifeExp, probability = TRUE, main = &quot;Histogram with a Kernal Density&quot;,
+    xlab = &quot;Life Expectancy (yrs)&quot;)
+lines(density(gapminder$lifeExp), col = 2, lwd = 2)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<ul>
+<li>The choice of <strong>bandwidth</strong> determines the
+<strong>smoothness</strong> of the density.</li>
+</ul>
+<blockquote>
+<p>There is a <strong>bias-variance trade-off</strong> in the choice of
+the <strong>bandwidth</strong>:</p>
+<ul>
+<li>the larger the bandwidth, the smoother the density (<strong>low
+variance, high bias</strong>)</li>
+<li>the smaller the bandwidth, the less smooth the density (<strong>high
+variance, low bias</strong>)</li>
+</ul>
+</blockquote>
+<p><br></p>
+<pre class="r"><code>plot(density(gapminder$lifeExp, bw = 10), ylim = c(0, 0.05), main = &quot;Density with bandwidth of 10&quot;,
+    lwd = 2, xlab = &quot;Life Expectancy (yrs)&quot;)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code>b &lt;- c(5, 3, 1, 0.5)  #this is a vector for the different bandwidths used later
+
+plot(density(gapminder$lifeExp, bw = 10), ylim = c(0, 0.05), main = &quot;Densities with bandwidth of 10 and 5&quot;,
+    lwd = 2, xlab = &quot;Life Expectancy (yrs)&quot;)
+lines(density(gapminder$lifeExp, bw = b[1]), col = 2, lwd = 2)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<pre class="r"><code>plot(density(gapminder$lifeExp, bw = 10), ylim = c(0, 0.05), main = &quot;Densities with bandwidths = 10, 5, 3&quot;,
+    lwd = 2, xlab = &quot;Life Expectancy (yrs)&quot;)
+
+for (i in 1:2) {
+    lines(density(gapminder$lifeExp, bw = b[i]), col = i + 1, lwd = 2)
+}</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<pre class="r"><code>plot(density(gapminder$lifeExp, bw = 10), ylim = c(0, 0.05), main = &quot;Densities with bandwidths = 10, 5, 3, 1&quot;,
+    lwd = 2, xlab = &quot;Life Expectancy (yrs)&quot;)
+
+for (i in 1:3) {
+    lines(density(gapminder$lifeExp, bw = b[i]), col = i + 1, lwd = 2)
+}</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<pre class="r"><code>plot(density(gapminder$lifeExp, bw = 10), ylim = c(0, 0.05), main = &quot;Density with Different Bandwidths&quot;,
+    lwd = 2, xlab = &quot;Life Expectancy (yrs)&quot;)
+
+for (i in seq_along(b)) {
+    lines(density(gapminder$lifeExp, bw = b[i]), col = i + 1, lwd = 2)
+}
+
+legend(&quot;topleft&quot;, paste0(&quot;bw=&quot;, c(10, b)), fill = 1:5)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><br><br><br></p>
+</div>
+</div>
+</div>
+<div id="one-variable---numeric-summary" class="section level3">
+<h3>3. One variable - numeric summary</h3>
+<pre class="r"><code>x3 &lt;- data.frame(X1 = rnorm(10000, 0, 1), X2 = rnorm(10000, 5, 1), X3 = rnorm(10000,
+    0, 2), X4 = rchisq(10000, 2) - 2, X5 = rt(10000, df = 3))
+
+plot(density(x3[, 1]), lwd = 2, xlim = c(-8, 17), xlab = &quot;&quot;, main = &quot;Kernel density estimates for five distributions&quot;,
+    sub = &quot;&quot;)
+
+for (j in (2:NCOL(x3))) lines(density(x3[, j]), col = j, lwd = 2)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<div id="location-scalevariability-and-sahpe" class="section level4">
+<h4>3.0 Location, Scale/Variability, and Sahpe</h4>
+<ul>
+<li><p>Can we describe the differences between these five distributions
+using numerical summaries?</p></li>
+<li><p>1&gt; <strong>Location</strong></p>
+<ul>
+<li>what is the “<strong>most common</strong>” value of the
+distribution?</li>
+<li>where is the “<strong>center</strong>” of the data?</li>
+</ul></li>
+<li><p>2&gt; <strong>Scale</strong> or <strong>Variability</strong></p>
+<ul>
+<li>how “<strong>concentrated</strong>” are the values around the
+average?</li>
+<li>how “<strong>spread out</strong>” are the values?</li>
+</ul></li>
+<li><p>3&gt; <strong>Shape</strong></p>
+<ul>
+<li>what is the “<strong>shape</strong>” of the distribution?</li>
+</ul></li>
+</ul>
+<p><br></p>
+<div id="location-mean-and-median" class="section level5">
+<h5>3.0.1 Location: Mean and median</h5>
+<ul>
+<li>(arithmetic) mean</li>
+</ul>
+<p><br></p>
+<p><span class="math display">\[
+\bar{x}=\frac{\sum_{i=1}^{n} x_{i}}{n}
+\]</span></p>
+<p><br></p>
+<ul>
+<li>median = <strong>robust statistic</strong>: it is less influenced by
+extreme values, unlike the man, which is not robust.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="example-mean-vs-median" class="section level5">
+<h5>3.0.2 Example: mean vs median</h5>
+<pre class="r"><code>x &lt;- 1:10
+mean(x)</code></pre>
+<pre><code>## [1] 5.5</code></pre>
+<pre class="r"><code>median(x)</code></pre>
+<pre><code>## [1] 5.5</code></pre>
+<pre class="r"><code>x &lt;- c(1:9, 100)
+mean(x)</code></pre>
+<pre><code>## [1] 14.5</code></pre>
+<pre class="r"><code>median(x)</code></pre>
+<pre><code>## [1] 5.5</code></pre>
+<p><br></p>
+</div>
+<div id="example-location-of-the-five-distributions"
+class="section level5">
+<h5>3.0.3 Example: Location of the five distributions</h5>
+<pre class="r"><code>plot(density(x3[, 1]), lwd = 2, xlim = c(-8, 17), xlab = &quot;&quot;, main = &quot;Kernel density estimates for five distributions&quot;,
+    sub = &quot;&quot;)
+
+for (j in (2:NCOL(x3))) lines(density(x3[, j]), col = j, lwd = 2)
+
+legend(&quot;topright&quot;, paste0(&quot;Mean: &quot;, round(colMeans(x3))), fill = 1:NCOL(x3))</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="scale-standard-deviation-and-variance" class="section level4">
+<h4>3.1 Scale: Standard Deviation and Variance</h4>
+<ul>
+<li><p><strong>Standard Deviation (SD)</strong>: measures the
+<strong>spread</strong>, <strong>variability</strong>, or
+<strong>scale</strong> of a distribution.</p></li>
+<li><p>It is defined as:</p></li>
+</ul>
+<p><span class="math display">\[
+s_{x}=\sqrt{\frac{\sum_{i=1}^{n}\left(x_{i}-\bar{x}\right)^{2}}{n-1}}
+\]</span></p>
+<ul>
+<li><strong>Variance</strong>: is the square of the standard
+deviation.</li>
+</ul>
+<div id="example-standard-deviation-of-the-five-distributions"
+class="section level5">
+<h5>3.1.1 Example: Standard Deviation of the five distributions</h5>
+<pre class="r"><code>plot(density(x3[, 1]), lwd = 2, xlim = c(-8, 17), xlab = &quot;&quot;, main = &quot;Kernel density estimates for five distributions&quot;,
+    sub = &quot;&quot;)
+
+for (j in (2:NCOL(x3))) lines(density(x3[, j]), col = j, lwd = 2)
+
+legend(&quot;topright&quot;, paste0(&quot;Mean: &quot;, round(colMeans(x3)), &quot;; SD: &quot;, round(apply(x3,
+    2, sd))), fill = 1:NCOL(x3))</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p><br></p>
+</div>
+<div id="properties-of-the-mean-and-standard-deviation"
+class="section level5">
+<h5>3.1.2 Properties of the Mean and Standard Deviation</h5>
+<ul>
+<li>If the data are approximately normally distributed, roughly
+<ul>
+<li><strong>68%</strong> of the observations are within <strong>one
+SD</strong> of the mean.</li>
+<li><strong>95%</strong> of the observations are within <strong>two
+SD</strong> of the mean.</li>
+<li><strong>99.7%</strong> of the observations are within <strong>three
+SD</strong> of the mean.</li>
+</ul></li>
+<li>For arbitrary constants <span class="math inline">\(a\)</span> and
+<span class="math inline">\(b\)</span>, let <span
+class="math inline">\(y_i\)</span>=<span
+class="math inline">\(a\)</span><span
+class="math inline">\(x_i\)</span>+<span
+class="math inline">\(b\)</span>, <span
+class="math inline">\(i\)</span>=<span
+class="math inline">\(1\)</span>,…,<span
+class="math inline">\(n\)</span>. Then,</li>
+</ul>
+<p><span class="math display">\[
+\begin{array}{l}\bar{y}=a \bar{x}+b \\ \text { and } \\ s_{y}=|a|
+s_{x}\end{array}
+\]</span></p>
+<ul>
+<li>It is often useful to <strong>standardize</strong> variables to have
+mean zero and SD of one. (i.e., Z-score or standard units)</li>
+</ul>
+<p><span class="math display">\[
+z=\frac{x-\bar{x}}{s_{x}}
+\]</span></p>
+<p><br></p>
+</div>
+<div id="scale-variability-robust-statistic" class="section level5">
+<h5>3.1.3 Scale / Variability: robust statistic</h5>
+<ul>
+<li>median</li>
+<li>inter-quartile range (IQR)
+<ul>
+<li>the difference between the upper- and lower-quartile (i.e., the
+observation that has 75% of the data below it and observation that has
+25% of the observations below it, respectively.)</li>
+<li>The IQR contains the middle 50% of the data.</li>
+</ul></li>
+<li>median absolute deviation (MAD): the median of the absolute
+deviations from the median</li>
+</ul>
+<p><span class="math display">\[
+M A D_{x}=\operatorname{median}\left(\left|x_{i}-M_{x}\right|\right)
+\]</span></p>
+<p>where <span class="math inline">\(M_x\)</span> is the median of <span
+class="math inline">\(X=\left\{x_{1}, \ldots, x_{n}\right\}\)</span></p>
+<blockquote>
+<p>Note that quantile vs. quartile.</p>
+</blockquote>
+<p><br></p>
+</div>
+</div>
+<div id="quantiles" class="section level4">
+<h4>3.2 Quantiles</h4>
+<ul>
+<li><span class="math inline">\(f quantile\)</span> or $f $100th <span
+class="math inline">\(percentile\)</span> of a distribution is the
+smallest number <span class="math inline">\(q\)</span> such that at
+least $f $100th of the observations are less than or equal to <span
+class="math inline">\(q\)</span>.</li>
+<li>$f $100% of the area under the histogram is to the left of the <span
+class="math inline">\(f\)</span> quantile.</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Quartiles</th>
+<th>Quantiles</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>First/lower quartile</td>
+<td>0.25 quantile</td>
+</tr>
+<tr class="even">
+<td>Second quartile/median</td>
+<td>0.50 quantile</td>
+</tr>
+<tr class="odd">
+<td>Third/upper quartile</td>
+<td>0.75 quantile</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<div id="median-as-a-quantile" class="section level5">
+<h5>3.2.1 Median as a Quantile</h5>
+<p><span class="math display">\[
+\operatorname{median} \equiv\left\{\begin{array}{ll}x_{m+1}, &amp; \text
+{ if } n=2 m+1, \text { for some } m \geq 0 \\
+\frac{1}{2}\left(x_{m}+x_{m+1}\right), &amp; \text { if } n=2 m, \text {
+for some } m&gt;0\end{array}\right.
+\]</span></p>
+</div>
+</div>
+<div id="boxplots" class="section level4">
+<h4>3.3 Boxplots</h4>
+<ul>
+<li>also called <strong>box-and-whisker plot</strong></li>
+<li>graphical representation of the <strong>median</strong>,
+<strong>upper quartile</strong>, <strong>lower quartile</strong>, and
+the <strong>range</strong> with <strong>outliers</strong> (if
+possible).</li>
+</ul>
+<pre class="r"><code>x &lt;- c(rnorm(100), c(-4, 5))
+boxplot(x)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<ul>
+<li>bold line: median</li>
+<li>upper and lower sides of the box: upper and lower quartiles,
+respectively</li>
+<li>central box: IQR</li>
+<li>whiskers (점선): range</li>
+<li>outliers: any point more than 1.5XIQR above the upper quartile (or
+below the lower quartile) are plotted <strong>individually</strong> as
+outliers</li>
+</ul>
+<blockquote>
+<p>Comparing the distances between the quartiles and the median gives
+indication of the symmetry of the distribution.</p>
+</blockquote>
+<pre class="r"><code>boxplot(x3, col = 1:NCOL(x3), main = &quot;Boxplots for Five Distributions&quot;)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<div id="pros-and-cons-of-boxplots" class="section level5">
+<h5>3.3.1 Pros and Cons of Boxplots</h5>
+<ul>
+<li>Pros:
+<ul>
+<li>1&gt; effectiveness at identifying outlying observations</li>
+<li>2&gt; quick way to compare several distributions as can be seen in
+graphic with the boxplots corresponding to the 5 distributions</li>
+</ul></li>
+<li>Cons: hides <strong>multimodality</strong> in the data.</li>
+</ul>
+<pre class="r"><code>x &lt;- rnorm(100)
+y &lt;- rgamma(100, shape = 0.5)
+z &lt;- c(rnorm(50), rnorm(50, mean = 5))
+
+par(mfrow = c(2, 3))
+boxplot(x, main = &quot;Normally distributed&quot;)
+boxplot(y, main = &quot;Skewed&quot;)
+boxplot(z, main = &quot;Bimodal&quot;)
+
+hist(x, probability = TRUE, main = &quot;&quot;)
+lines(density(x), col = 2, lwd = 2)
+
+hist(y, probability = TRUE, main = &quot;&quot;)
+lines(density(y), col = 2, lwd = 2)
+
+hist(z, probability = TRUE, main = &quot;&quot;)
+lines(density(z), col = 2, lwd = 2)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p><br></p>
+</div>
+</div>
+<div id="normal-q-q-plot" class="section level4">
+<h4>3.4 Normal Q-Q plot</h4>
+<ul>
+<li>to display <strong>all the quantiles</strong> of a distribution</li>
+<li>and to compare them to the quantiles of <strong>reference
+distribution</strong>
+<ul>
+<li>e.g. From a qq-plot, in normal distribution, one can detect
+<strong>shifts in location</strong>, <strong>differences in
+scale/variability</strong>, and <strong>differences in
+shape</strong>.</li>
+</ul></li>
+</ul>
+<pre class="r"><code>par(mfrow = c(2, 3))
+
+for (i in seq_len(NCOL(x3))) {
+    qqnorm(x3[, i], pch = 20, col = i)
+    abline(0, 1)
+}</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<ul>
+<li>(1st plot) two distributions are the same, both normal.</li>
+<li>(2nd plot) shows a shift or diffrence in mean between one
+distribution compared to the other, but both are normal.</li>
+<li>(3rd plot) illustrates a difference in the scale/variability (i.e.,
+Variance, SD) between the two distributions.</li>
+<li>(4th plot) demonstrates a difference in shape between the two
+distributions. The distribution is more skewed than a normal
+distribution.</li>
+<li>(5th plot) demonstrates a difference in shape between the two
+distributions. The distribution has heavier tails than a normal
+distribution.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="shape-skewness-and-kurtosis" class="section level4">
+<h4>3.5 Shape: Skewness and Kurtosis</h4>
+<ul>
+<li>green, blue, and cyan distributions have the same mean and variance,
+but they are clearly different. Why?</li>
+<li><strong>Skewness</strong> and <strong>kurtosis</strong> are based on
+the third and fourth moment of the distribution, respectively.</li>
+<li><strong>Moments</strong> are statistics of a data distribution, that
+<strong>relate to the shape</strong> of the distributions.</li>
+</ul>
+<p><br></p>
+<div id="shape-skewness" class="section level5">
+<h5>3.5.1 Shape: Skewness</h5>
+<ul>
+<li><strong>skewness</strong> relates to the <strong>symmetry</strong>
+of the distribution:
+<ul>
+<li>skewness=0: the distribution is symmetric around its mean</li>
+<li>skewness&gt;0: positive skewness or right-skewed</li>
+<li>skewness&lt;0: negative skewness or left-skewed</li>
+</ul></li>
+</ul>
+<p align="center">
+<img src = 'https://www.managedfuturesinvesting.com/images/default-source/default-album/skewness---mean-median-mode.jpg'>
+</p>
+<p><br></p>
+</div>
+<div id="shape-kurtosis" class="section level5">
+<h5>3.5.2 Shape: Kurtosis</h5>
+<ul>
+<li><strong>kurtosis</strong> relates to the <strong>weight</strong> of
+the <strong>tails</strong> of the distribution:
+<ul>
+<li>kurtosis=3: normal distribution</li>
+<li>kurtosis&gt;3: distribution has heavier tails, more likely to
+observe extreme values</li>
+<li>kurtosis&lt;3: distribution has lighter tails, less likely to
+observe extreme values</li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="shape-skewness-and-kurtosis-1" class="section level5">
+<h5>3.5.3 Shape: Skewness and Kurtosis</h5>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p><br><br><br></p>
+</div>
+</div>
+</div>
+<div id="two-variables---graphic-summary" class="section level3">
+<h3>4. Two variables - graphic summary</h3>
+<ul>
+<li><strong>boxplots</strong>, <strong>histograms</strong>, and
+<strong>density plots</strong> all summrize the
+<strong>univariate</strong> distribution of a single variable.</li>
+<li>What if we want to capture the relation between variables?</li>
+<li><strong>scatterplot</strong> is for two variables.</li>
+</ul>
+<p><br></p>
+<div id="scatterplots" class="section level4">
+<h4>4.1 Scatterplots</h4>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p><br></p>
+</div>
+<div id="overplotting-problem-of-scatterplots" class="section level4">
+<h4>4.2 Overplotting problem of Scatterplots</h4>
+<pre class="r"><code>gapminder %&gt;%
+    ggplot(aes(x = log(gdpPercap), y = lifeExp)) + geom_point() + theme_classic() +
+    ggtitle(&quot;Relation between life expectancy and log of GDP per capita (all years)&quot;)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<ul>
+<li>if the number of points increases substantially, there will be a lot
+of overlap among the points and you lose information because you would
+not know if there are points on top of others.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="overplotting-hexbin-scatterplot" class="section level4">
+<h4>4.3 Overplotting: hexbin scatterplot</h4>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p><br></p>
+</div>
+<div id="overplotting-density-scatterplot" class="section level4">
+<h4>4.4 Overplotting: density scatterplot</h4>
+<pre class="r"><code>gapminder %&gt;%
+    ggplot(aes(x = log(gdpPercap), y = lifeExp)) + geom_density2d() + theme_classic() +
+    ggtitle(&quot;Relation between life expectancy and log of GDP per capita (all years)&quot;)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<ul>
+<li>Another plot to use when there is considerable overplotting of
+points is the two-d density plot (geom_density2d). The closer the lines
+are to each other, the more dense the points.</li>
+</ul>
+<p><br><br><br></p>
+</div>
+</div>
+<div id="two-variables---numeric-summary" class="section level3">
+<h3>5. Two variables - numeric summary</h3>
+<ul>
+<li><strong>Variance</strong> and <strong>Standard deviation</strong>
+are summaries of the spread of the distribution of <strong>one
+variable</strong>.
+<ul>
+<li>Thus, both cannot explain the relationship between <strong>two
+variables</strong>.</li>
+</ul></li>
+</ul>
+<p><br></p>
+<div id="covariance" class="section level4">
+<h4>5.1 Covariance</h4>
+<ul>
+<li><strong>Covariance</strong> can be used to assess the relationship
+between two variables, say x and y.</li>
+</ul>
+<p><span class="math display">\[
+r=\operatorname{Cor}(x, y)=\frac{1}{n}
+\sum_{i=1}^{n}\left(\frac{x_{i}-\bar{x}}{s_{x}}\right)\left(\frac{y_{i}-\bar{y}}{s_{y}}\right)
+\]</span></p>
+<p><br></p>
+</div>
+<div id="correlation-coefficient" class="section level4">
+<h4>5.2 Correlation Coefficient</h4>
+<ul>
+<li>the problem with the covariance is that it depends on the scale of
+the two variables.</li>
+<li>often more useful to have an absolute indication of the strength of
+the relationship, such as an index between -1 and 1.
+<ul>
+<li>Such an index is the <strong>correlation coefficient</strong>.</li>
+</ul></li>
+<li><strong>Correlation Coefficient</strong> is a measure of a
+<strong>linear association</strong> between two variables.
+<ul>
+<li>r=0: no (linear) relationship or association</li>
+<li>r=1: perfect linear positive association</li>
+<li>r=-1: perfect linear negative association</li>
+</ul></li>
+</ul>
+<p><br></p>
+<ul>
+<li>There are several types of correlation: <strong><em>Pearson
+correlation</em></strong>, <strong><em>Spearmans’ correlation
+coefficient</em></strong>.
+<ul>
+<li>Both are <strong>robust measure of correlation</strong>, where ranks
+are used in place of the values of x and y.</li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="example-of-correlation-in-data" class="section level4">
+<h4>5.3 Example of Correlation in Data</h4>
+<pre class="r"><code>suppressPackageStartupMessages(library(MASS))</code></pre>
+<pre><code>## Warning: package &#39;MASS&#39; was built under R version 4.0.5</code></pre>
+<pre class="r"><code>par(mfrow = c(2, 2))
+x &lt;- mvrnorm(100, c(0, 0), matrix(c(1, 0, 0, 1), 2, 2, byrow = TRUE))
+plot(x, xlab = &quot;x&quot;, ylab = &quot;y&quot;, main = paste(&quot;Cor[x,y] = &quot;, round(cor(x[, 1], x[,
+    2]), 2), sep = &quot;&quot;))
+x &lt;- mvrnorm(100, c(0, 0), matrix(c(1, -0.75, -0.75, 1), 2, 2, byrow = TRUE))
+plot(x, xlab = &quot;x&quot;, ylab = &quot;y&quot;, main = paste(&quot;Cor[x,y] = &quot;, round(cor(x[, 1], x[,
+    2]), 2), sep = &quot;&quot;))
+x &lt;- mvrnorm(100, c(0, 0), matrix(c(1, 0.75, 0.75, 1), 2, 2, byrow = TRUE))
+plot(x, xlab = &quot;x&quot;, ylab = &quot;y&quot;, main = paste(&quot;Cor[x,y] = &quot;, round(cor(x[, 1], x[,
+    2]), 2), sep = &quot;&quot;))
+x &lt;- mvrnorm(100, c(0, 0), matrix(c(1, 0.99, 0.99, 1), 2, 2, byrow = TRUE))
+plot(x, xlab = &quot;x&quot;, ylab = &quot;y&quot;, main = paste(&quot;Cor[x,y] = &quot;, round(cor(x[, 1], x[,
+    2]), 2), sep = &quot;&quot;))</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<p><br></p>
+</div>
+<div id="these-patterns-are-not-captured-by-univariate-techniques"
+class="section level4">
+<h4>5.4 These patterns are not captured by univariate techniques</h4>
+<pre class="r"><code>par(mfrow = c(2, 2))
+x &lt;- mvrnorm(100, c(0, 0), matrix(c(1, 0, 0, 1), 2, 2, byrow = TRUE))
+boxplot(data.frame(x), main = paste(&quot;Cor[x1,x2] = &quot;, round(cor(x[, 1], x[, 2]), 2),
+    sep = &quot;&quot;))
+x &lt;- mvrnorm(100, c(0, 0), matrix(c(1, -0.75, -0.75, 1), 2, 2, byrow = TRUE))
+boxplot(data.frame(x), main = paste(&quot;Cor[x1,x2] = &quot;, round(cor(x[, 1], x[, 2]), 2),
+    sep = &quot;&quot;))
+x &lt;- mvrnorm(100, c(0, 0), matrix(c(1, 0.75, 0.75, 1), 2, 2, byrow = TRUE))
+boxplot(data.frame(x), main = paste(&quot;Cor[x1,x2] = &quot;, round(cor(x[, 1], x[, 2]), 2),
+    sep = &quot;&quot;))
+x &lt;- mvrnorm(100, c(0, 0), matrix(c(1, 0.99, 0.99, 1), 2, 2, byrow = TRUE))
+boxplot(data.frame(x), main = paste(&quot;Cor[x1,x2] = &quot;, round(cor(x[, 1], x[, 2]), 2),
+    sep = &quot;&quot;))</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-34-1.png" width="672" />
+<br></p>
+</div>
+<div id="example-quadratic-association" class="section level4">
+<h4>5.5 Example: Quadratic Association</h4>
+<ul>
+<li>Note that the correlation coefficient only captures linear
+relationships between two variables.</li>
+<li>However, in many real situations, variables have non-linear
+relationships.</li>
+</ul>
+<pre class="r"><code>x &lt;- rnorm(500)
+y &lt;- -x^2 + rnorm(500, 0, 0.5)
+plot(x, y, main = paste(&quot;Cor[x,y] = &quot;, round(cor(x, y), 2), sep = &quot;&quot;))
+abline(lm(y ~ x)[[1]], col = 2, lwd = 2)
+lines(lowess(y ~ x, f = 0.2), col = 3, lwd = 2)
+legend(&quot;bottom&quot;, c(&quot;Ordinary linear regression&quot;, &quot;Robust local regression&quot;), col = 2:3,
+    lwd = 2)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<blockquote>
+<ul>
+<li>만약 두 변수 x, y간 non-linear relationship이 있는 경우, x, y의
+상관계수를 측정했을 때 0이 나올 수 있음
+<ul>
+<li>이는 x, y가 관계를 가지고 있는 것이 분명해도, 그 관계가 ’linear’이
+아니가 때문임</li>
+</ul></li>
+<li>상관계수는 두 변수의 “<strong>linear relationship</strong>”만을
+알려줌. 따라서, x, y 간의 relationship이 있더라도 그 관계가 선형이
+아니라면, 상관계수로 두 변수 x, y의 relationship을 제대로 측정할 수
+없음.</li>
+</ul>
+</blockquote>
+<p><br><br><br></p>
+</div>
+</div>
+<div id="what-if-more-than-two-variables" class="section level3">
+<h3>6. What if more than two variables</h3>
+<p><br></p>
+<ul>
+<li>covariance matrix (also called variance/covariance matrix)</li>
+<li>correlation matrix</li>
+</ul>
+<p><br></p>
+<div id="correlation-matrix" class="section level4">
+<h4>6.1 Correlation Matrix</h4>
+<ul>
+<li>To get a correlation matrix for the variables <code>lifeExp</code>,
+<code>pop</code>, and <code>gdpPercap</code> in the gapminder data, we
+can use the <code>R</code> function <code>cor()</code>.</li>
+</ul>
+<pre class="r"><code>cor(gapminder[, 4:6])</code></pre>
+<pre><code>##              lifeExp         pop   gdpPercap
+## lifeExp   1.00000000  0.06495537  0.58370622
+## pop       0.06495537  1.00000000 -0.02559958
+## gdpPercap 0.58370622 -0.02559958  1.00000000</code></pre>
+<ul>
+<li>Graphical methods for displaying the correlation.</li>
+</ul>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<pre class="r"><code>library(ellipse)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;ellipse&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:graphics&#39;:
+## 
+##     pairs</code></pre>
+<pre class="r"><code>plotcorr(r)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+<p><br></p>
+</div>
+<div id="univariate-distribution-of-multiple-variables"
+class="section level4">
+<h4>6.2 Univariate Distribution of Multiple Variables</h4>
+<ul>
+<li>There is a way to take a look at the univariate distribution of
+multiple variables at a time.
+<ul>
+<li>Useful when we have a <strong>large collection</strong> of fairly
+uniformly distributed variables.</li>
+<li>e.g. In genomics, we often collect expression data for thousands of
+genes (variables) at a time.</li>
+<li>In such cases, we can disply <strong>boxplots</strong> or
+<strong>density plots</strong> for multiple variables.</li>
+<li>Another popular display is the <strong>heatmap</strong>.</li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="example-expression-of-5-genes" class="section level4">
+<h4>6.3 Example: Expression of 5 genes</h4>
+<pre class="r"><code># Install bioconductor packages
+if (!requireNamespace(&quot;BiocManager&quot;, quietly = TRUE)) install.packages(&quot;BiocManager&quot;)
+
+BiocManager::install(&quot;golubEsets&quot;)
+
+if (!requireNamespace(&quot;BiocManager&quot;, quietly = TRUE)) install.packages(&quot;BiocManager&quot;)
+
+BiocManager::install(&quot;hu6800.db&quot;)</code></pre>
+<pre class="r"><code>suppressPackageStartupMessages(library(golubEsets))</code></pre>
+<pre><code>## Warning: package &#39;BiocGenerics&#39; was built under R version 4.0.5</code></pre>
+<pre class="r"><code>suppressPackageStartupMessages(library(hu6800.db))
+data(Golub_Train)
+golub &lt;- exprs(Golub_Train)
+golub[golub &lt; 100] &lt;- 100
+golub[golub &gt; 16000] &lt;- 16000
+golub &lt;- log2(golub)
+AffyID &lt;- mappedkeys(hu6800SYMBOL)
+symbols &lt;- links(hu6800SYMBOL[AffyID])
+
+indZYX &lt;- grep(&quot;zyx&quot;, symbols[, 2], ignore.case = TRUE)
+indNUP &lt;- grep(&quot;NUP98&quot;, symbols[, 2], ignore.case = TRUE)
+
+symbols5 &lt;- links(hu6800SYMBOL[c(symbols[c(indZYX[1], indNUP[1]), 1], c(&quot;AB004884_at&quot;,
+    &quot;A28102_at&quot;, &quot;AC000064_cds1_at&quot;))])
+golub5 &lt;- t(golub[symbols5[, 1], ])
+colnames(golub5) &lt;- symbols5[, 2]
+
+boxplot(golub5, ylab = &quot;Gene expression&quot;)</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+<pre class="r"><code>library(ggridges)
+library(tidyr)
+library(ggplot2)
+
+golub_tall &lt;- gather(data.frame(golub5), key = &quot;Gene&quot;, value = &quot;Expression&quot;)
+
+ggplot(golub_tall, aes(x = Expression, y = Gene, group = Gene, fill = Gene)) + geom_density_ridges() +
+    theme_classic() + scale_fill_brewer(palette = &quot;Set3&quot;)</code></pre>
+<pre><code>## Picking joint bandwidth of 0.392</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<p><br></p>
+<pre class="r"><code>library(pheatmap)
+pheatmap(t(golub5))</code></pre>
+<p><img src="stat_seminar_wk01-2_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<p><br><br><br></p>
+<p><a href="toc.html">&lt; Back to Syllabus</a></p>
+<p><br><br><br></p>
+</div>
+</div>
+
+<br><br>
+<footer>
+  <p class="copyright text-muted" align="center">Copyright &copy; 2024 Cold Spring Harbor Laboratory</p>
+</footer>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

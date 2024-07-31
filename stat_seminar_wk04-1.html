@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Week 4-1. Bootstrapping</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Cold Spring Harbor Laboratory Biostatistics</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="services.html">Services</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Training
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="biostatistics_course.html">Biostatistics Course</a>
+    </li>
+    <li>
+      <a href="toc.html">Intro to Statistics</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="communication.html">Communication</a>
+</li>
+<li>
+  <a href="https://github.com/taehoonh/CSHLbiostat">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<!-- <link rel="stylesheet" href="styles.css" type="text/css"> -->
+<p><br><br><br></p>
+<p><a href="toc.html">&lt; Back to Syllabus</a></p>
+<p><br><br><br></p>
+<div id="bootstrap" class="section level3">
+<h3>1. Bootstrap</h3>
+<div id="motivation" class="section level4">
+<h4>1.1 Motivation</h4>
+<ul>
+<li>We make some assumptions that:
+<ul>
+<li>we knew the <strong>data generating distribution</strong>, or</li>
+<li>we had enough observations to use <strong>asymptotic
+approximations</strong>.</li>
+</ul></li>
+<li>In other words, for a sample proportion, we know that the exact
+sampling distribution is a <strong>rescaled binomial
+distribution</strong>.
+<ul>
+<li>If <span class="math inline">\(Y~B(n, \pi)\)</span> then the sample
+proportion is <span class="math inline">\(Y/n\)</span>, so it is a
+rescaled binomial.</li>
+<li>If <span class="math inline">\(n\)</span>, <span
+class="math inline">\(np\)</span>, and <span
+class="math inline">\(n(1-p)\)</span> are large enough, then the sample
+proportion can be approximated with a <strong>normal
+distribution</strong>:</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+\mathrm{N}\left(\pi, \sqrt{\frac{\pi(1-\pi)}{n}}\right)
+\]</span></p>
+<ul>
+<li>What if we don’t want to make assumptions on the data generating
+distribution or we don’t want to rely on asymptotic results?
+<ul>
+<li>We can use <strong>bootstrap</strong> to approximate the sampling
+distribution of the estimator.</li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="definition-of-the-bootstrap" class="section level4">
+<h4>1.2 Definition of the bootstrap</h4>
+<ul>
+<li><strong>Bootstrap</strong> is a procedure that uses the given sample
+to create a new distribution that approximates the sampling distribution
+of a given statistics.
+<ul>
+<li>The new distribution is called the <strong>bootstrap
+distribution</strong>.</li>
+</ul></li>
+<li><strong>Bootstrap distribution</strong> can be obtained by:
+<ul>
+<li>&lt;1&gt; drawing samples of size <span
+class="math inline">\(n\)</span> <strong>with replacement</strong> from
+the original sample</li>
+<li>&lt;2&gt; and then comput the statistic for each sample.
+<ul>
+<li>These samples are called <strong>resamples</strong> or
+<strong>bootstrap samples</strong>.</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="the-bootstrap-procedure" class="section level4">
+<h4>1.3 The bootstrap procedure</h4>
+<ul>
+<li>Given a sample of <span class="math inline">\(n\)</span>
+observations (the original sample):
+<ul>
+<li>&lt;1&gt; Draw a sample of size <span
+class="math inline">\(n\)</span> which replacement from the original
+sample.</li>
+<li>&lt;2&gt; Compute the value of the statistic for each bootstrap
+sample.</li>
+<li>&lt;3&gt; Repeat the process for <span
+class="math inline">\(B\)</span> times (with <span
+class="math inline">\(B\)</span> ‘large’).</li>
+<li>&lt;4&gt; Construct the bootstrap distribution of the
+statistics.</li>
+</ul></li>
+</ul>
+<p><br><br></p>
+</div>
+</div>
+<div
+id="example-proportion-of-manhattan-residents-under-the-age-of-25-years"
+class="section level3">
+<h3>2. Example: Proportion of Manhattan residents under the age of 25
+years</h3>
+<p>Recall an example used in class. The US Census indicates that 35% of
+US residents are less than 25 years old. We will take a random sample
+120 of Manhattan residents and determine the proportion of individuals
+who are less than 25 years old. The question of interest is whether
+there is there evidence that Manhattan has a diﬀerent age distribution
+than US residents globally.</p>
+<p>We will simulate a random sample from Manhattan. In our sample, we
+will indicate a “success” (person under 25 years old) as an 1 and a 0
+will represent an individual who is 25 years or older. The code below
+saves the sample results in an vector called <code>manhattanSamp</code>.
+Here is code for a random sample of size 250.</p>
+<p><br></p>
+<div id="what-is-the-sampling-distribution-of-p-the-sample-proportion"
+class="section level4">
+<h4>2.1 What is the (sampling) distribution of <span
+class="math inline">\(P\)</span>, the sample proportion?</h4>
+<pre class="r"><code>B &lt;- 10000
+n &lt;- length(manhattanSamp)
+sampleProp &lt;- replicate(B, {
+    x &lt;- sample(manhattanSamp, size = n, replace = TRUE)
+    mean(x)
+})
+
+hist(sampleProp, probability = TRUE, breaks=30, col=&quot;lemonchiffon&quot;) 
+curve(dnorm(x, mean = mean(manhattanSamp), sd = sd(manhattanSamp)/sqrt(n)), add=TRUE, col=2, lwd=4) 
+lines((0:250)/250,250*dbinom(0:250,250, 0.235), type=&quot;h&quot;, lwd=2, col=4) 
+legend(&quot;topright&quot;, c(&quot;Normal Appoximation&quot;, &quot;Exact&quot;), lty=1, col=c(2,4), lwd=2)</code></pre>
+<p><img src="figs/hist_of_sampleProp.png" width="645" style="display: block; margin: auto;" /></p>
+<ul>
+<li>In both the mean and the standard deviation, we can see that the
+bootstrap sample has value similar to the original sample.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="bootstrap-quantiles-percentile-method" class="section level4">
+<h4>2.2 Bootstrap quantiles: Percentile Method</h4>
+<ul>
+<li>Since the bootstrap allows us to approximate the whole sampling
+distribution of the estimator, we can also compute the quantiles to
+construct a confidence interval for the mean.</li>
+<li><code>R</code>:</li>
+</ul>
+<pre class="r"><code>quantile(sampleProp, c(0.025, 0.975))</code></pre>
+<pre><code>##      2.5%     97.5% 
+## 0.2064321 0.3167708</code></pre>
+<ul>
+<li>This is called the <strong>percentile method</strong>.</li>
+<li>According to the percentile method, the 95% confidence interval is
+0.2064321 to 0.3167708.</li>
+</ul>
+<p><br><br></p>
+</div>
+</div>
+<div id="properties-of-the-bootstrap-distribution"
+class="section level3">
+<h3>3. Properties of the bootstrap distribution</h3>
+<div id="center-of-the-bootstrap-distribution" class="section level4">
+<h4>3.1 Center of the bootstrap distribution</h4>
+<ul>
+<li>The center of the bootstrap distribution is <strong>NOT</strong> an
+accurate approximation of the center of the sampling distribution.
+<ul>
+<li>The bootstrap distribution of <span
+class="math inline">\(\hat{\theta}\)</span> is centered around the
+observed value <span class="math inline">\(\hat{\theta}\)</span> not
+around <span class="math inline">\(\theta\)</span>.</li>
+</ul></li>
+<li>Hence, the bootstrap procedure cannot be used to get better
+parameter estimates.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="variance-and-bias" class="section level4">
+<h4>3.2 Variance and bias</h4>
+<p>The variance of the bootstrap distribution is a good approximation of
+the variance of the sampling distribution.</p>
+<ul>
+<li>The bias of the bootstrap estimates reflect the bias of the
+estimator.</li>
+<li><strong>The bootstrap is a procedure that can be used to qunatify
+the performance of estimators.</strong></li>
+<li>Bootstrap을 통해서 estimators(모수추정치들)의 성능(얼마나
+좋은/정확한 추정인지)을 평가할 수 있음</li>
+</ul>
+<p><br></p>
+</div>
+<div id="example-computing-the-mse-of-an-estimator"
+class="section level4">
+<h4>3.3 Example: Computing the MSE of an estimator</h4>
+<ul>
+<li>The Mean Squared Error (MSE) of an estimator is:</li>
+</ul>
+<p><span class="math display">\[
+M S
+E[\hat{\theta}]=E\left[(\hat{\theta}-\theta)^{2}\right]=\operatorname{Var}(\hat{\theta})+\operatorname{Bias}(\hat{\theta})^{2}
+\]</span></p>
+<ul>
+<li>We can use the bootstrap to estimate the MSE by substituting the
+original estimate <span class="math inline">\(\hat{\theta}\)</span> for
+<span class="math inline">\(\theta\)</span> and the bootstrap estimates
+<span class="math inline">\(\hat{\theta}*\)</span> for <span
+class="math inline">\(\hat{\theta}\)</span>.</li>
+</ul>
+<p><span class="math display">\[
+\widehat{M S E}[\hat{\theta}]=\frac{1}{B}
+\sum_{b=1}^{B}\left(\hat{\theta}^{*}-\hat{\theta}\right)^{2}=\operatorname{Var}\left(\hat{\theta}^{*}\right)+\operatorname{Bias}\left(\hat{\theta}^{*}\right)^{2}
+\]</span></p>
+<ul>
+<li><code>R</code> to compute an estimate of the MSE for a bootstrap
+sample proportion.</li>
+</ul>
+<pre class="r"><code># MSE
+sum((sampleProp - mean(manhattanSamp))^2)/B</code></pre>
+<pre><code>## [1] 0.0007955637</code></pre>
+<blockquote>
+<p>The estimate of the MSE for a bootstrap sample proportion is
+7.9556373^{-4}. So an estimate of the MSE for a bootstrap sample
+proportion is 0.001. The corresponding bias of the bootstrap estimator
+(to three decimal places) is 0.</p>
+</blockquote>
+<p><br></p>
+</div>
+<div id="asymptotic-vs-bootstrap-confidence-interval"
+class="section level4">
+<h4>3.4 Asymptotic vs Bootstrap confidence interval</h4>
+<ul>
+<li>For estimating a population proportion, we have seen two ways.
+<ul>
+<li>&lt;1&gt; the normal distribution is a good approximation of the
+sampling distribution of <span class="math inline">\(P\)</span> when
+<span class="math inline">\(n\)</span>, <span class="math inline">\(n
+\pi\)</span>, <span class="math inline">\(n(1-\pi)\)</span> is
+large</li>
+<li>&lt;2&gt; bootstrapping</li>
+</ul></li>
+<li>Note that <strong>both are approximations</strong>!
+<ul>
+<li>There is no fixed rule to choose between the two methods, but rather
+one needs to know the situations in which one works better than the
+other.
+<ul>
+<li>(symmetric, unimodal distribution) the normal approximation works
+better than the bootstrap.</li>
+<li>(asymmetric, bimodal distribution) the bootstrap may be a better
+alternative than the normal approximation.</li>
+</ul></li>
+<li>When <span class="math inline">\(n\)</span> is small, both methods
+do not work well.
+<ul>
+<li>When <span class="math inline">\(n\)</span> is small, use the
+<strong>exact rescaled binomial distribution</strong>.</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><br><br></p>
+</div>
+</div>
+<div id="accuracy-of-the-bootstrap" class="section level3">
+<h3>4. Accuracy of the Bootstrap</h3>
+<div id="random-sampling" class="section level4">
+<h4>4.1 Random sampling</h4>
+<ul>
+<li>The bootstrap principle involves drawing n observations from the
+original sample with replacement.</li>
+<li>In small samples, we could create all possible resamplings, but even
+for moderate <span class="math inline">\(n\)</span>, this is
+unfeasible.</li>
+<li>For <span class="math inline">\(n\)</span> = 10 and <span
+class="math inline">\(n\)</span> = 20 the number of possible samples
+are:</li>
+</ul>
+<pre class="r"><code>n &lt;- 10
+(ps &lt;- choose(2 * n -1, n))</code></pre>
+<pre><code>## [1] 92378</code></pre>
+<blockquote>
+<p>In case of <span class="math inline">\(n\)</span>=10, there are
+9.2378^{4} possible samples.</p>
+</blockquote>
+<pre class="r"><code>n &lt;- 20
+(ps &lt;- choose(2 * n -1, n))</code></pre>
+<pre><code>## [1] 68923264410</code></pre>
+<blockquote>
+<p>In case of <span class="math inline">\(n\)</span>=10, there are
+6.8923264^{10} possible samples.</p>
+</blockquote>
+<p><br></p>
+<ul>
+<li>Hence, we usually randomly select a <strong>subset B of such
+resamplings</strong>.</li>
+<li>This means we have <strong>two distrinct distributions</strong>:
+<ul>
+<li><strong>Theoretical bootstrap distribution</strong> consisting of
+all the <span class="math inline">\(n^n\)</span> values.</li>
+<li><strong>Monte Carlo bootstrap distribution</strong> consisting of
+the randomly selected <span class="math inline">\(B\)</span> &lt; <span
+class="math inline">\(n^n\)</span> values.
+<ul>
+<li><strong>Monte Carlo bootstrap sampling</strong> adds
+<strong>additional unwanted variability</strong>, that depends on how
+large B is.</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="accuracy-of-bootstrap-distributions" class="section level4">
+<h4>4.2 Accuracy of bootstrap distributions</h4>
+<ul>
+<li>&lt;1&gt; How accurate is the theoretical bootstrap?</li>
+<li>&lt;2&gt; How accurately does the Monte Carlo implementation
+approximate the theoretical bootstrap?</li>
+</ul>
+<p><br></p>
+<ul>
+<li>Can improve the accuracy in &lt;2&gt; by <strong>increasing the
+number of bootstrap samples</strong>.</li>
+<li>However, there are situations in which the theoretical bootstrap
+distribution is <strong>NOT</strong> accurate.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="sample-proportion-large-sample-size" class="section level4">
+<h4>4.3 Sample proportion: large sample size</h4>
+<ul>
+<li>In case for which we know the sampling distribution of the
+population proportion,
+<ul>
+<li>Consider <span class="math inline">\(Y\)</span>~<span
+class="math inline">\(B(n, \pi)\)</span>, then</li>
+<li>we know that the sample proportion, <span
+class="math inline">\(P\)</span>, is a rescaled binomial with mena <span
+class="math inline">\(\pi\)</span>.</li>
+</ul></li>
+<li><code>R</code>: How the bootstrap distribution approximates the true
+distribution with a large sample size, <span
+class="math inline">\(n\)</span>=300 and a population proportion of
+<span class="math inline">\(\pi\)</span>=0.5.</li>
+</ul>
+<pre class="r"><code>n &lt;- 300
+# Using the same original sample
+y &lt;- rbinom(300, 1, 0.5)
+B &lt;- 10000
+boot &lt;- replicate(B, {
+    s &lt;- sample(y, size = n, replace = TRUE)
+    # Using the original sample
+    mean(s)
+})
+
+plot((0:300)/300,300*dbinom(0:300,300, 0.5), type=&quot;h&quot;, col = 2, lwd=4, xlab=&quot;sample proportion&quot;, ylab=&quot;density&quot;)
+lines(density(boot), col=4, lwd=4)
+abline(v = 0.5, lwd = 2, col = 1, lty = 2)
+abline(v = mean(y), lwd = 2, lty = 2, col=5)
+legend(&quot;topright&quot;, c(&quot;True mean&quot;, &quot;Sample mean&quot;), lty=2, col=c(1,5), lwd=2)</code></pre>
+<p><img src="stat_seminar_wk04-1_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<ul>
+<li>The bootstrap distribution is not an accurate approximation of the
+center of the distribution.</li>
+<li>However, it is accurate at approximating its
+<strong>spread</strong>.
+<ul>
+<li>The spread (measured by the standard deviation) of the bootstrapped
+distribution is 0.029 and the corresponding value in the sample is
+0.029.</li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="sample-mean-large-sample-size" class="section level4">
+<h4>4.4 Sample mean: large sample size</h4>
+<ul>
+<li>&lt;1&gt; Using the original sample
+<ul>
+<li>the accuracy related to point 2 above is pretty good.</li>
+</ul></li>
+</ul>
+<pre class="r"><code>n &lt;- 300
+# Using the original sample
+y &lt;- rbinom(250, 1, 0.5)
+B &lt;- 10000
+
+boot &lt;- replicate(10, {
+    replicate(B, {
+        s &lt;- sample(y, size = n, replace = TRUE)
+        # Using the original sample
+        mean(s)
+    })
+})</code></pre>
+<ul>
+<li>The standard deviation of each of the 10 different bootstrap
+sampling distribution is :</li>
+</ul>
+<pre class="r"><code>(sds &lt;- apply(boot, 2, sd))</code></pre>
+<pre><code>##  [1] 0.02939144 0.02890283 0.02882894 0.02890785 0.02866845 0.02900223
+##  [7] 0.02870043 0.02848080 0.02874674 0.02896233</code></pre>
+<ul>
+<li>&lt;2&gt; With different samples for each bootstrap
+<ul>
+<li>the accuracy related to point 1 above is also pretty good.</li>
+<li>However, the variability coming from the random sampling of the
+original sample is <strong>much higher</strong> than the bootstrp
+variability.</li>
+</ul></li>
+</ul>
+<pre class="r"><code>n &lt;- 300
+B &lt;- 10000
+
+boot2 &lt;- replicate(10, {
+    # With different samples for each bootstrap
+    y &lt;- rbinom(n, 1, 0.5)
+    replicate(B, {
+        s &lt;- sample(y, size = n, replace = TRUE)
+        mean(s)
+    })
+})</code></pre>
+<ul>
+<li>And the standard deviations of each of the 10 bootstrapped samples
+are:</li>
+</ul>
+<pre class="r"><code>(sds2 &lt;- apply(boot2, 2, sd))</code></pre>
+<pre><code>##  [1] 0.02862964 0.02832271 0.02899045 0.02888168 0.02848900 0.02901158
+##  [7] 0.02847996 0.02854243 0.02886581 0.02898566</code></pre>
+<ul>
+<li>The ratio of the variances: <strong>0.957</strong>
+<ul>
+<li>(Variance of the 10 standard deviations of the bootstrapped samples
+from the same original sample) vs.</li>
+<li>(Variance of the standard deviations of bootstrapped samples each
+from a different original sample)</li>
+</ul></li>
+<li>0.957 which is less than one, it shows that the <strong>variability
+in each sample is more than that of the bootstrapped sample from the
+original sample.</strong></li>
+</ul>
+<p><br></p>
+</div>
+<div id="sample-mean-samll-sample-size" class="section level4">
+<h4>4.5 Sample mean: samll sample size</h4>
+<ul>
+<li>In case <span class="math inline">\(n\)</span>=5,</li>
+</ul>
+<pre class="r"><code>n &lt;- 5
+y &lt;- rbinom(n, 1, 0.5)
+B &lt;- 10000
+
+boot &lt;- replicate(B, {
+    s &lt;- sample(y, size = n, replace = TRUE)
+    mean(s)
+})
+
+plot((0:5)/5,5*dbinom(0:5,5, 0.5), type=&quot;h&quot;, col = 2, lwd=4, ylim = c(0, 2), xlab=&quot;sample proportion&quot;, ylab=&quot;density&quot;)
+lines(density(boot, bw=.1), col=4, lwd=4)
+abline(v = 0.5, lwd = 2, col = 1, lty = 2)
+abline(v = mean(y), lwd = 2, lty = 2, col=5)
+legend(&quot;topright&quot;, c(&quot;True mean&quot;, &quot;Sample mean&quot;), lty=2, col=c(1,5), lwd=2)</code></pre>
+<p><img src="stat_seminar_wk04-1_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<ul>
+<li>With small <span class="math inline">\(n\)</span>, the bootstrap
+distribution is not an accurate approximation of the spread of the
+sampling distribution.
+<ul>
+<li>The standard deviation of the bootstrap sampling distribution is
+0.221, while the standard deviation from the original sample is
+0.245.</li>
+<li>But the accuracy is not bad.</li>
+</ul></li>
+</ul>
+<p><br></p>
+<ul>
+<li>In case <span class="math inline">\(n\)</span>=10,</li>
+</ul>
+<pre class="r"><code>n &lt;- 5
+y &lt;- rbinom(5, 1, 0.5)
+B &lt;- 10000
+
+boot &lt;- replicate(10, {
+    replicate(B, {
+        s &lt;- sample(y, size = n, replace = TRUE)
+        mean(s)
+    })
+})
+
+(sds &lt;- apply(boot, 2, sd))</code></pre>
+<pre><code>##  [1] 0.1797592 0.1802509 0.1765080 0.1771508 0.1775471 0.1764528 0.1781882
+##  [8] 0.1792257 0.1768745 0.1791327</code></pre>
+<ul>
+<li>If we repeat the procedure with different original samples, we see
+that the accuracy related to point 1 above is now worse.</li>
+</ul>
+<blockquote>
+<p><strong>Takeaway</strong></p>
+<ul>
+<li>The accuracy of the theoretical bootstrap depends on the original
+sample size n, while the accuracy of the Monte Carlo procedure depends
+on the number of bootstrap samples B.</li>
+</ul>
+</blockquote>
+<ul>
+<li><code>R</code>: 10 bootstrapped sampling distributions, each from a
+diﬀerent original sample</li>
+</ul>
+<pre class="r"><code>n &lt;- 5
+B &lt;- 10000
+
+boot2 &lt;- replicate(10, {
+    y &lt;- rbinom(n, 1, 0.5)
+    replicate(B, {
+        s &lt;- sample(y, size = n, replace = TRUE)
+        mean(s)
+    })
+})</code></pre>
+<ul>
+<li>The ratio of the variances: <strong>0.018</strong>
+<ul>
+<li>(Variance of the 10 standard deviations of the bootstrapped samples
+from the same original sample) vs.</li>
+<li>(Variance of the standard deviations of bootstrapped samples each
+from a different original sample)</li>
+</ul></li>
+<li>0.018 which is less than one, it shows that the <strong>variability
+in each sample is more than that of the bootstrapped sample from the
+original sample.</strong></li>
+</ul>
+<p><br></p>
+</div>
+<div id="how-many-bootstrap-samples-are-needed" class="section level4">
+<h4>4.6 How many bootstrap samples are needed?</h4>
+<ul>
+<li>In general, <span class="math inline">\(B=10000\)</span> bootstrap
+samples lead to good accuracy
+<ul>
+<li>but there may be reasons to draw more or less samples, depending on
+the problem and on the objective of the study.</li>
+</ul></li>
+<li>Most of the time, <strong>the main limiting facotr is the size of
+the original sample</strong>, not the number of bootstrap samples.</li>
+</ul>
+<p><br></p>
+<ul>
+<li>In case <span class="math inline">\(B\)</span>=100,</li>
+</ul>
+<pre class="r"><code>n &lt;- 250
+y &lt;- rbinom(n, 1, 0.5)
+B &lt;- 100
+
+boot &lt;- replicate(10, {
+    replicate(B, {
+        s &lt;- sample(y, size = n, replace = TRUE)
+        mean(s)
+    })
+})
+
+(sds &lt;- apply(boot, 2, sd))</code></pre>
+<pre><code>##  [1] 0.02714180 0.03274526 0.03173028 0.02934465 0.03164171 0.03434452
+##  [7] 0.03337878 0.03386247 0.03464510 0.03317663</code></pre>
+<p><br><br></p>
+</div>
+</div>
+<div id="useful-r-packages" class="section level3">
+<h3>5. Useful <code>R</code> packages</h3>
+<ul>
+<li><code>boot</code> package is a gneral purpose package for all
+different types of the bootstrap</li>
+<li><code>slipper</code> package is designed to work with the bootstrap
+in a <code>tidyverse</code> pipeline</li>
+</ul>
+<div id="boot-package" class="section level4">
+<h4>5.1 <code>boot</code> package</h4>
+<ul>
+<li>reuqires three arguments:
+<ul>
+<li>the original sample</li>
+<li>a function to compute the statistics</li>
+<li>number of bootstrap samples</li>
+</ul></li>
+</ul>
+<pre class="r"><code>library(boot)
+n &lt;- 300
+x &lt;- rbinom(n, 1, 0.5)
+
+bootProp &lt;- function(x, idx)
+    {
+    return(c(mean(x[idx]), var(x[idx])))
+}
+
+(bootObj &lt;- boot(x, bootProp, 10000))</code></pre>
+<pre><code>## 
+## ORDINARY NONPARAMETRIC BOOTSTRAP
+## 
+## 
+## Call:
+## boot(data = x, statistic = bootProp, R = 10000)
+## 
+## 
+## Bootstrap Statistics :
+##      original        bias    std. error
+## t1* 0.4900000  0.0005286667 0.029059603
+## t2* 0.2507358 -0.0008368718 0.001320175</code></pre>
+<ul>
+<li>Confidence interval:</li>
+</ul>
+<pre class="r"><code>boot.ci(bootObj, type = &#39;all&#39;)</code></pre>
+<pre><code>## BOOTSTRAP CONFIDENCE INTERVAL CALCULATIONS
+## Based on 10000 bootstrap replicates
+## 
+## CALL : 
+## boot.ci(boot.out = bootObj, type = &quot;all&quot;)
+## 
+## Intervals : 
+## Level      Normal              Basic             Studentized     
+## 95%   ( 0.4325,  0.5464 )   ( 0.4333,  0.5467 )   ( 0.4331,  0.5472 )  
+## 
+## Level     Percentile            BCa          
+## 95%   ( 0.4333,  0.5467 )   ( 0.4300,  0.5433 )  
+## Calculations and Intervals on Original Scale</code></pre>
+<p><br></p>
+</div>
+<div id="example" class="section level4">
+<h4>5.2 Example</h4>
+<p>The question is whether the there is evidence that the age
+distribution of Manhattan residents diﬀers from that of the general US
+residents. We know that the <span
+class="math inline">\(\pi\)</span>=0.35 for US residents. The
+manhattanSamp contains a random sample of Manhattan residents (it is
+truly a realistic representation of the Manhattan residents). We will
+now use boot to generate a percentile confidence interval for the
+population proportion based on a bootstrapped distribution of our
+sample.</p>
+<pre class="r"><code>bootProp &lt;- function(x, idx) {
+    return(mean(x[idx]))
+}
+
+bootManhattanObj &lt;- boot(manhattanSamp, bootProp, 10000)
+boot.ci(bootManhattanObj, type = &#39;all&#39;)</code></pre>
+<pre><code>## BOOTSTRAP CONFIDENCE INTERVAL CALCULATIONS
+## Based on 10000 bootstrap replicates
+## 
+## CALL : 
+## boot.ci(boot.out = bootManhattanObj, type = &quot;all&quot;)
+## 
+## Intervals : 
+## Level      Normal              Basic         
+## 95%   ( 0.2064,  0.3172 )   ( 0.2068,  0.3174 )  
+## 
+## Level     Percentile            BCa          
+## 95%   ( 0.2065,  0.3170 )   ( 0.2060,  0.3166 )  
+## Calculations and Intervals on Original Scale</code></pre>
+<blockquote>
+<ul>
+<li>The 95% confidence interval is 0.206 to 0.317.</li>
+<li>Since the 95% bootstrap confidence interval does not contain 0.35,
+there is evidence that the age distribution of Manhattan residents
+differs from the general population of US residents.</li>
+<li>It appears as though there is a lower proportion of Manhattan
+residents who are under 25 years old.</li>
+</ul>
+</blockquote>
+<p><br><br><br></p>
+<p><a href="toc.html">&lt; Back to Syllabus</a></p>
+<p><br><br><br></p>
+</div>
+</div>
+
+<br><br>
+<footer>
+  <p class="copyright text-muted" align="center">Copyright &copy; 2024 Cold Spring Harbor Laboratory</p>
+</footer>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

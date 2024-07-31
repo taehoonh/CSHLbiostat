@@ -1,11 +1,17 @@
 ---
 title: "Training"
+output:
+  html_document: 
+    toc: true
+    toc_float: true
 ---
 
 <br><br><br>
 
 <link rel="stylesheet" href="styles.css" type="text/css">
 <link rel="stylesheet" href="site_libs/academicons-1.9.1/css/academicons.min.css"/>
+
+### Summer Biostatistics Course
 
 The Biostatistics Core at Cold Spring Harbor Laboratory is committed to training scientists at every stage of their careers, from students to senior investigators. Our educational activities include:
 

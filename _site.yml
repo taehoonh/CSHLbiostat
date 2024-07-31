@@ -6,7 +6,11 @@ navbar:
   - text: Services
     href: services.html
   - text: Training
-    href: training.html
+    menu: 
+    - text: "Biostatistics Course"
+      href: biostatistics_course.html
+    - text: "Intro to Statistics"
+      href: toc.html
   - text: Communication
     href: communication.html
   - icon: fa-github

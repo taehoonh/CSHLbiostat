@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Week 4-2. Type I &amp; II error and Power</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Cold Spring Harbor Laboratory Biostatistics</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="services.html">Services</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Training
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="biostatistics_course.html">Biostatistics Course</a>
+    </li>
+    <li>
+      <a href="toc.html">Intro to Statistics</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="communication.html">Communication</a>
+</li>
+<li>
+  <a href="https://github.com/taehoonh/CSHLbiostat">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<!-- <link rel="stylesheet" href="styles.css" type="text/css"> -->
+<p><br><br><br></p>
+<p><a href="toc.html">&lt; Back to Syllabus</a></p>
+<p><br><br><br></p>
+<div id="type-i-and-type-ii-error" class="section level3">
+<h3>1. Type I and Type II Error</h3>
+<div id="hypothesis-test-review" class="section level4">
+<h4>1.1 Hypothesis test review</h4>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: <span
+class="math inline">\(\theta\)</span>=<span
+class="math inline">\(\theta_0\)</span></li>
+<li><span class="math inline">\(H_a\)</span>: <span
+class="math inline">\(\theta \ne \theta_0\)</span>.</li>
+<li>Given a <strong>test statistic</strong>, the <strong>null
+distribution</strong> of the statistic, and a <strong>significant
+level</strong>, we are able to determine if we have enough evidence in
+the data to <strong>reject the null hypothesis</strong>.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="errors" class="section level4">
+<h4>1.2 Errors</h4>
+<ul>
+<li>When testing hypothesis, there are two possible errors that we can
+make:
+<ul>
+<li><strong>Type I error</strong>: Rejecting the null when the null
+hypothesis is true.</li>
+<li><strong>Type II error</strong>: Not rejecting the null when the null
+hypothesis is false.</li>
+</ul></li>
+</ul>
+<p><br></p>
+<table>
+<thead>
+<tr class="header">
+<th>Test vs. truth</th>
+<th><span class="math inline">\(H_0\)</span> is true</th>
+<th><span class="math inline">\(H_0\)</span> is false</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Reject <span class="math inline">\(H_0\)</span></td>
+<td>Type I error</td>
+<td>Correct</td>
+</tr>
+<tr class="even">
+<td>Do not reject <span class="math inline">\(H_0\)</span></td>
+<td>Correct</td>
+<td>Type II error</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<ul>
+<li>In classical statistics, we want to minimize the type I error, by
+setting a threshold to limit it to a pre-speciﬁed acceptable value, say
+5%.</li>
+<li>The significance level of a test is the <span
+class="math inline">\(\alpha\)</span> that we find acceptable for the
+probability of a type I error.</li>
+<li>Good scientific and statistical practice is to set this value at the
+time you are designing the study, well before you look at any study
+data.</li>
+<li>The definition of type I error (or the level of significance)
+is</li>
+</ul>
+<p><span class="math display">\[
+\alpha=\operatorname{Pr}\left(\text { Reject } H_{0} \mid H_{0} \text {
+is true }\right)
+\]</span></p>
+<ul>
+<li><p>We can control the probability of a type I error by setting the
+signiﬁcance level, <span class="math inline">\(\alpha\)</span>.</p></li>
+<li><p>The definition of type II error is:</p></li>
+</ul>
+<p><span class="math display">\[
+\beta=\operatorname{Pr}\left(\text { Do not reject } H_{0} \mid H_{0}
+\text { is false }\right)
+\]</span></p>
+<ul>
+<li>If we are just given a set of data, we can control the type I errors
+by setting the <span class="math inline">\(\alpha\)</span> as we are
+planning the analysis, before we look at the data.</li>
+<li>However in this case, we do not have control over the probability of
+a type II error and we just accept its value.
+<ul>
+<li>However, if we are designing a study from scratch, we can set both
+the type I error and type II error and determine the sample size needed
+to achieve these values.</li>
+</ul></li>
+</ul>
+<blockquote>
+<p>Study design 단계에서부터 필요한 sample size를 구하고 들어오면, type
+I and type II error 모두 control 가능함</p>
+</blockquote>
+<p><br></p>
+</div>
+<div id="power" class="section level4">
+<h4>1.3 Power</h4>
+<ul>
+<li>Usually, we are not interested directly in the type II error, but in
+its complement,</li>
+</ul>
+<p><span class="math display">\[
+1-\beta=\operatorname{Pr}\left(\text { Reject } H_{0} \mid H_{0} \text {
+is false }\right)=\text { power }
+\]</span></p>
+<ul>
+<li>This is called the <strong>power of the test</strong>: the
+probability of correctly rejecting the null hypothesis when it is
+false.</li>
+</ul>
+<table>
+<colgroup>
+<col width="29%" />
+<col width="35%" />
+<col width="35%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Test vs. Truth</th>
+<th><span class="math inline">\(H_0\)</span> is true</th>
+<th><span class="math inline">\(H_0\)</span> is false</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Reject <span class="math inline">\(H_0\)</span></td>
+<td><span class="math inline">\(\alpha\)</span> (Type I error)</td>
+<td><span class="math inline">\(1-\beta\)</span> (Power)</td>
+</tr>
+<tr class="even">
+<td>Do not reject <span class="math inline">\(H_0\)</span></td>
+<td><span class="math inline">\(1-\alpha\)</span></td>
+<td><span class="math inline">\(\beta\)</span> (Type II error)</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+</div>
+<div id="illustration-of-type-i-and-type-ii-error"
+class="section level4">
+<h4>1.4 Illustration of type I and type II error</h4>
+<ul>
+<li>Can use <strong>density plots</strong> to illustrate the
+relationship of <span class="math inline">\(\alpha\)</span>, power <span
+class="math inline">\((1-\beta)\)</span> and the null and alternative
+hypotheses.</li>
+</ul>
+<pre class="r"><code>curve(dnorm, from = -3, to = 3,
+      xlim = c(-3, 6),
+      lwd = 2, col = 4,
+      axes = F, xlab = NA, ylab = NA)
+curve(dnorm(x, mean = 3.2), 
+      add = TRUE, col = 2, lwd = 2, from = 0, to = 6)
+coord.x &lt;- c(qnorm(0.95), seq(qnorm(0.95), 6, by = 0.01), 6)
+coord.y &lt;- c(0, dnorm(coord.x[-c(1, length(coord.x))], mean = 3.2), 0)
+polygon(coord.x, coord.y, col = rgb(1, 0, 0, 0.5))
+coord.x &lt;- c(qnorm(0.95), seq(qnorm(0.95), 3, by = 0.01), 3)
+coord.y &lt;- c(0, dnorm(coord.x[-c(1, length(coord.x))]), 0)
+polygon(coord.x, coord.y, col = rgb(0, 0, 1, 0.5))
+abline(v = qnorm(0.95), lty = 2, lwd = 2)
+text(3.2, 0.2, labels = expression(1 - beta))
+text(2, 0.02, labels = expression(alpha), col = &quot;white&quot;)
+axis(1, at = c(0, 3.2), labels = c(expression(theta[0]), expression(theta[1])))
+axis(2)
+box()
+legend(&quot;topleft&quot;,
+       c(&quot;Distribution under H0&quot;,
+         &quot;Distribution under H1&quot;,
+         &quot;Critical value&quot;), 
+       bg = &quot;transparent&quot;, 
+       lty = c(1, 1, 2),
+       col = c(4, 2, 1), lwd = 2)</code></pre>
+<p><img src="stat_seminar_wk04-2_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>curve(dnorm, from = -3, to = 3, 
+      xlim = c(-3, 6), 
+      lwd = 2, col = 4, axes = FALSE, 
+      xlab = NA, ylab = NA)
+curve(dnorm(x, mean = 3.2), 
+      add = TRUE, col = 2, lwd = 2,
+      from = 0, to = 6)
+coord.x &lt;- c(qnorm(0.95), seq(qnorm(0.95), 0, by = -0.01), 0)
+coord.y &lt;- c(0, dnorm(coord.x[-c(1, length(coord.x))], mean = 3.2), 0)
+polygon(coord.x, coord.y, col = rgb(1, 0, 0, 0.5))
+coord.x &lt;- c(qnorm(0.95), seq(qnorm(0.95), 3, by = 0.01), 3)
+coord.y &lt;- c(0, dnorm(coord.x[-c(1, length(coord.x))]), 0)
+polygon(coord.x, coord.y, col = rgb(0, 0, 1, 0.5))
+abline(v = qnorm(0.95), lty = 2, lwd = 2)
+text(1, 0.02, labels = expression(beta))
+text(2, 0.02, labels = expression(alpha), col = &quot;white&quot;)
+axis(1, at = c(0, 3.2),
+     labels = c(expression(theta_0), expression(theta_a)))
+axis(2)
+box()
+legend(&quot;topleft&quot;,
+       c(&quot;Type I error&quot;, &quot;Type II error&quot;),
+       fill = c(rgb(0, 0, 1, 0.5),
+                rgb(1, 0, 0, 0.5)))</code></pre>
+<p><img src="stat_seminar_wk04-2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>curve(dnorm, from=-3, to=3, 
+      xlim=c(-3, 6), lwd=2, col=4,
+      axes=FALSE, xlab=NA, ylab=NA) 
+curve(dnorm(x, mean=3.2), 
+      add=TRUE, col=2, lwd=2,
+      from=0, to=6) 
+coord.x &lt;- c(qnorm(0.9), seq(qnorm(0.9), 0, by=-0.01), 0) 
+coord.y &lt;- c(0, dnorm(coord.x[-c(1, length(coord.x))], mean=3.2), 0) 
+polygon(coord.x, coord.y, col=rgb(1, 0, 0, 0.5)) 
+coord.x &lt;- c(qnorm(0.9), seq(qnorm(0.9), 3, by=0.01), 3) 
+coord.y &lt;- c(0, dnorm(coord.x[-c(1, length(coord.x))]), 0) 
+polygon(coord.x, coord.y, col=rgb(0, 0, 1, 0.5)) 
+abline(v = qnorm(0.9), lty=2, lwd=2) 
+text(1, 0.02, labels = expression(beta)) 
+text(2, 0.02, labels = expression(alpha), col = &quot;white&quot;) 
+axis(1, at = c(0, 3.2), labels = c(expression(theta_0), expression(theta_a))) 
+axis(2) 
+box() 
+legend(&quot;topleft&quot;, 
+       c(&quot;Type I error&quot;, &quot;Type II error&quot;), 
+       fill = c(rgb(0, 0, 1, 0.5), 
+                rgb(1, 0, 0, 0.5)))</code></pre>
+<p><img src="stat_seminar_wk04-2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>curve(dnorm, 
+      from=-3, to=3, 
+      xlim=c(-3, 6), lwd=2, col=4, 
+      axes=FALSE, xlab=NA, ylab=NA) 
+curve(dnorm(x, mean=3.2), 
+      add=TRUE, col=2, lwd=2, 
+      from=0, to=6) 
+coord.x &lt;- c(qnorm(0.99), seq(qnorm(0.99), 0, by=-0.01), 0) 
+coord.y &lt;- c(0, dnorm(coord.x[-c(1, length(coord.x))], mean=3.2), 0) 
+polygon(coord.x, coord.y, col=rgb(1, 0, 0, 0.5)) 
+coord.x &lt;- c(qnorm(0.99), seq(qnorm(0.99), 3, by=0.01), 3) 
+coord.y &lt;- c(0, dnorm(coord.x[-c(1, length(coord.x))]), 0) 
+polygon(coord.x, coord.y, col=rgb(0, 0, 1, 0.5)) 
+abline(v = qnorm(0.99), lty=2, lwd=2) 
+text(1.6, 0.02, labels = expression(beta)) 
+text(2.5, 0.015, labels = expression(alpha), col = &quot;white&quot;) 
+axis(1, at = c(0, 3.2), labels = c(expression(theta_0), expression(theta_a))) 
+axis(2) 
+box() 
+legend(&quot;topleft&quot;, 
+       c(&quot;Type I error&quot;, &quot;Type II error&quot;), 
+       fill = c(rgb(0, 0, 1, 0.5), 
+                rgb(1, 0, 0, 0.5)))</code></pre>
+<p><img src="stat_seminar_wk04-2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><br><br></p>
+</div>
+</div>
+<div id="example-binomial-distribution" class="section level3">
+<h3>2. Example: Binomial distribution</h3>
+<ul>
+<li>simple random sample from a population with two outcomes (success
+and failure), with unknown probability of success <span
+class="math inline">\(\pi\)</span></li>
+</ul>
+<pre class="r"><code>y &lt;- rbinom(100, 1, 0.5)</code></pre>
+<ul>
+<li>to test
+<ul>
+<li><span class="math inline">\(H_0: \pi= \pi_0=0.5\)</span></li>
+<li><span class="math inline">\(H_a: \pi= \pi_a&gt;0.5\)</span>
+(one-sided)</li>
+</ul></li>
+<li>Under <span class="math inline">\(H_0\)</span>, <span
+class="math inline">\(P\)</span> has a rescaled <span
+class="math inline">\(B(100, \pi_0)\)</span> distribution.</li>
+<li>Under <span class="math inline">\(H_a\)</span>, <span
+class="math inline">\(P\)</span> has a rescaled <span
+class="math inline">\(B(100, \pi_a)\)</span> distribution.</li>
+<li>(One-sided test) Rejection region: <span class="math inline">\((c,
++\infty)\)</span>
+<ul>
+<li>where <span class="math inline">\(c\)</span> is called the
+<strong>critical value</strong></li>
+</ul></li>
+<li>Since the sampling distribution of <span
+class="math inline">\(P\)</span> is a rescaled binomial, we can express
+<span class="math inline">\(c\)</span> either on the proportion scale or
+on the <strong>number of successes scale</strong>.</li>
+<li>Suppose we fix <span class="math inline">\(\alpha\)</span>, then the
+<strong>critical value</strong> can be computed from the binomial
+distribution:</li>
+</ul>
+<p><span class="math display">\[
+\operatorname{Pr}\left(Y&gt;y_{1-\alpha} \mid H_{0}\right)=\alpha
+\]</span></p>
+<ul>
+<li>When <span class="math inline">\(Y~B(n, \pi_0)\)</span>, then <span
+class="math inline">\(P=Y/n\)</span></li>
+<li>The <strong>rejection region</strong> is 95th percentile of the
+binomial distribution.</li>
+</ul>
+<pre class="r"><code>(q &lt;- qbinom(0.95, 100, 0.5))</code></pre>
+<pre><code>## [1] 58</code></pre>
+<ul>
+<li>Therefore, the **rejection region on the number of successes scale
+is <span class="math inline">\(Y&gt;58\)</span> or on the sample
+proportion scale (<span class="math inline">\(P\)</span> scale) is:</li>
+</ul>
+<p><span class="math display">\[
+\begin{array}{c}Y&gt;58 \\ Y / 100&gt;58 / 100 \\ P&gt;0.58\end{array}
+\]</span></p>
+<ul>
+<li>The plot of the null distribution and the critical value on the
+sample proportion scale</li>
+</ul>
+<pre class="r"><code>pi_0 &lt;- 0.5 
+n &lt;- 100 
+plot((20:80)/100,dbinom(20:80, n, pi_0),
+     type = &quot;h&quot;,lwd=2,
+     main=&quot;Rejection region&quot;,
+     xlab = &quot;sample proportion&quot;,
+     ylab=&quot;PMF&quot;) 
+abline(v = 0.58, lty=2, lwd=2, col=3) 
+lines((58:80)/100, dbinom(58:80,n, pi_0), 
+      type = &quot;h&quot;, lwd=4, col=4)
+legend(&quot;topright&quot;, 
+       c(&quot;Null distribution&quot;, &quot;Critical value&quot;), 
+       lwd=2, lty=c(1, 2), col=c(1, 3))</code></pre>
+<p><img src="stat_seminar_wk04-2_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<ul>
+<li>The probability of the blue region is approximately 0.05.</li>
+</ul>
+<p><br></p>
+<div id="power-1" class="section level4">
+<h4>2.1 Power</h4>
+<ul>
+<li>Power = <span class="math inline">\(1-\beta\)</span></li>
+<li>In order to compute the power, we have to assume a specific value
+for the alternative distribution.
+<ul>
+<li>In this case, presume that the researchers believe that <span
+class="math inline">\(\pi_a=0.6\)</span>.</li>
+<li>This corresponds to a sample proportion of 0.60 or a <span
+class="math inline">\(Y\)</span> value of <span
+class="math inline">\(Y=100 \times \pi_a=60\)</span>.</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+1-\beta=\operatorname{Pr}\left(\text { Reject }
+H_{0}|H_{a})=\operatorname{Pr}\left(Y&gt;58 \mid
+\pi_{a}=0.6\right)\right.
+\]</span></p>
+<ul>
+<li><code>R</code>: <code>pbinom()</code></li>
+</ul>
+<pre class="r"><code>(1 - pbinom(58, 100, 0.6)) %&gt;% round(3)</code></pre>
+<pre><code>## [1] 0.623</code></pre>
+<ul>
+<li><p>Therefore, the chance we will get a statistically significant
+result (meaning a <span class="math inline">\(p\)</span>-value &lt;
+<span class="math inline">\(\alpha=0.05\)</span>) **if the alternative
+hypothesis is true (i.e. under the alternative hypothesis) (e.g. <span
+class="math inline">\(\pi_a=0.60\)</span>) is 0.623.</p></li>
+<li><p>The plot of power, the sum of the red bars for the <span
+class="math inline">\(H_a\)</span> PMF is the
+<strong>power</strong></p></li>
+</ul>
+<pre class="r"><code>pi.0 &lt;- 0.5
+pi.a &lt;- 0.6
+n &lt;- 100
+plot((20:80)/100,dbinom(20:80, n, pi.0),
+     type = &quot;h&quot;,lwd=5, main=&quot;Power&quot;, 
+     xlab = &quot;sample proportion&quot;, ylab=&quot;PMF&quot;)
+lines((20:80)/100,
+      dbinom(20:80,n, pi.a),
+      type = &quot;h&quot;, lwd=2, col=&quot;orange&quot;)
+lines((59:80)/100,
+      dbinom(59:80,n, pi.a),
+      type = &quot;h&quot;, lwd=2, col=&quot;orangered3&quot;)
+abline(v = 0.58, lty=2, lwd=4, col=3)
+legend(&quot;topleft&quot;,
+       c(&quot;Null distribution&quot;,
+         &quot;Alternative distribution&quot;,
+         &quot;Critical value&quot;),
+       lwd=2, lty=c(1, 1, 2),
+       col=c(1, &quot;orange&quot;, 3))</code></pre>
+<p><img src="stat_seminar_wk04-2_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<ul>
+<li><p>Conclusion: We have 62.3% power to reject <span
+class="math inline">\(H_0: \pi=0.5\)</span> when the true population
+proportion is <span class="math inline">\(\pi=0.60\)</span> with a
+sample size of <span class="math inline">\(n\)</span> and a 5%
+(one-sided) level of significance.</p></li>
+<li><p><code>R</code> function to calculate the <strong>power</strong>:
+<code>propTestPower()</code> in the <code>EnvStats</code>
+package.</p></li>
+</ul>
+<pre class="r"><code>library(EnvStats)</code></pre>
+<pre><code>## Warning: package &#39;EnvStats&#39; was built under R version 4.0.5</code></pre>
+<pre><code>## 
+## Attaching package: &#39;EnvStats&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:MASS&#39;:
+## 
+##     boxcox</code></pre>
+<pre><code>## The following objects are masked from &#39;package:moments&#39;:
+## 
+##     kurtosis, skewness</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     predict, predict.lm</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     print.default</code></pre>
+<ul>
+<li>To get the power using an <strong>exact binomial
+distribution</strong>: set the argument to <code>approx = F</code> in
+<code>propTestPower()</code>.
+<ul>
+<li><code>approx = T</code> will make the function use a <strong>normal
+approximation</strong> to the binomial to determine the power.</li>
+</ul></li>
+</ul>
+<pre class="r"><code>samplePower &lt;- propTestPower(100,0.6, 0.5,
+                             alpha=0.05,
+                             sample.type = &quot;one.sample&quot;,
+                             alternative = &quot;greater&quot;,
+                             approx=FALSE)
+samplePower</code></pre>
+<pre><code>## $power
+## [1] 0.6225327
+## 
+## $alpha
+## [1] 0.04431304
+## 
+## $q.critical.upper
+## [1] 58</code></pre>
+<ul>
+<li>Due to the discreteness of the binomial distribution, the <span
+class="math inline">\(\alpha\)</span> is not exactly equal to the
+specified value.</li>
+<li>Conclusion: Using one-sided level of significance of 0.05 with a
+sample size of <span class="math inline">\(n\)</span>, there is 62.3%
+probability to detect a <span class="math inline">\(\pi_a=0.60\)</span>.
+The critical value is 58, meaning that if we observe more than this many
+successes, 58, we would reject the null hypothesis, <span
+class="math inline">\(H_0\)</span>.</li>
+</ul>
+<blockquote>
+<ul>
+<li>We DO NOT use the values of the sample in any of our
+calculations.</li>
+<li>This means we can compute the power of a test BEFORE performing the
+experiment.</li>
+<li>The power is actually determined during study design.</li>
+<li>It is not particularly useful to determine power after you have your
+data.</li>
+<li>The power associated with a sample can be better conveyed by
+presenting the confidence interval for your estimate.</li>
+<li><strong>If the confidence interval is wide, this means that the
+study did not have very high power.</strong></li>
+</ul>
+</blockquote>
+<p><br><br></p>
+</div>
+</div>
+<div id="power-2" class="section level3">
+<h3>3. Power</h3>
+<div id="power-curve" class="section level4">
+<h4>3.1 Power curve</h4>
+<ul>
+<li>So far, we have been interested in testing hypotheses, <span
+class="math inline">\(H_a: \pi&gt;\pi_0\)</span>, where there are many
+values of <span class="math inline">\(\pi\)</span> under <span
+class="math inline">\(H_a\)</span>.
+<ul>
+<li>Also, <span class="math inline">\(H_a:\pi&lt;\pi_0\)</span>.</li>
+</ul></li>
+<li><code>R</code>: the power of a range of values of <span
+class="math inline">\(\pi_a\)</span></li>
+</ul>
+<pre class="r"><code>pi.a &lt;- seq(0, 1, by = 0.01) 
+power &lt;- 1 - pbinom(qbinom(0.95,100,0.5), 100, pi.a)
+
+# Power curve with the sample size of n=100 for a population proportion
+plot(pi.a, power, 
+     type=&#39;s&#39;, lwd=2,
+     ylab=expression(1-beta),
+     xlab=expression(pi))</code></pre>
+<p><img src="stat_seminar_wk04-2_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<ul>
+<li>Features of the power curve:
+<ul>
+<li>&lt;1&gt; the curve converges to <span
+class="math inline">\(\alpha=0.05\)</span> when <span
+class="math inline">\(\pi\)</span> gets closer to <span
+class="math inline">\(\pi_0=0.5\)</span></li>
+<li>&lt;2&gt; the power increases with the distance between <span
+class="math inline">\(\pi\)</span> and <span
+class="math inline">\(\pi_0\)</span></li>
+<li>&lt;3&gt; the curve converges to 1 as <span
+class="math inline">\(\pi\)</span> gets further from <span
+class="math inline">\(\pi_0\)</span></li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="power-and-sample-size" class="section level4">
+<h4>3.2 Power and sample size</h4>
+<ul>
+<li>Power depends on the sample size.</li>
+<li>By increasing the number of observations in the sample, we can
+increase the power of the test (i.e., <span
+class="math inline">\(1-\beta\)</span> or decreasing the Type II
+error).</li>
+<li>The <strong>power of the test</strong> is important in order to
+understand <strong>what magnitude of effects we will be able to
+test</strong>.</li>
+<li>In particular, this is important for studies that do not have a
+statistically significant result.
+<ul>
+<li>Because the studies that have a statistically significant reuslt
+already have enough power.</li>
+</ul></li>
+<li>(<span class="math inline">\(p\)</span>-value &gt; <span
+class="math inline">\(\alpha\)</span>) the result is said not to be
+statistically significant.</li>
+<li>The question is
+<ul>
+<li>whether this is because <span class="math inline">\(H_0\)</span> is
+true, or</li>
+<li>because we did not have enough power to detect a difference of
+interest.</li>
+</ul></li>
+<li>Often, researchers decide what power they need to test a given
+effect size and plan to collect a sample of a size <span
+class="math inline">\(n\)</span> that will give them enough power.</li>
+<li><code>R</code>: the plot of the power of a test as a function of
+sample size</li>
+</ul>
+<pre class="r"><code>pi.a50 &lt;- seq(0, 1, by = 0.02)
+pi.a100 &lt;- seq(0, 1, by = 0.01) 
+pi.a200 &lt;- seq(0, 1, by = 1/200) 
+
+power50 &lt;- 1 - pbinom(qbinom(0.95,50,0.5), 50, pi.a50)
+plot(pi.a50, power50, type=&#39;s&#39;, ylab=expression(1-beta), xlab=expression(pi), lwd=2) 
+
+power100 &lt;- 1 - pbinom(qbinom(0.95,100,0.5), 100, pi.a100)
+lines(pi.a100, power100, type=&#39;s&#39;, col=3, lwd=2) 
+
+power200 &lt;- 1 - pbinom(qbinom(0.95,200,0.5), 200, pi.a200) 
+lines(pi.a200, power200, type=&#39;s&#39;, col=6, lwd=2) 
+
+legend(&quot;bottomright&quot;, paste0(&quot;n = &quot;, c(50,100,200)), lwd=2, col=c(1,3,6))</code></pre>
+<p><img src="stat_seminar_wk04-2_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><br></p>
+</div>
+<div id="what-do-we-know" class="section level4">
+<h4>3.3 What do we know?</h4>
+<ul>
+<li>In general we know <span class="math inline">\(\pi_0\)</span> and
+<span class="math inline">\(\alpha\)</span>.</li>
+<li><span class="math inline">\(\pi_0\)</span> is often based on
+historical data and the research team determines the <span
+class="math inline">\(\alpha\)</span> they want to use.</li>
+<li>In order to compute this <strong>power</strong>, we need to specify
+two of the following three:
+<ul>
+<li><span class="math inline">\(n\)</span>, <span
+class="math inline">\(\beta\)</span>, <span
+class="math inline">\(\pi_a\)</span></li>
+<li>Usually, we want to know what is the power for a given <span
+class="math inline">\(\pi_a\)</span> and <span
+class="math inline">\(n\)</span> or</li>
+<li>we want to know what sample size <span
+class="math inline">\(n\)</span> we need to obtain a certain power,
+<span class="math inline">\(1-\beta\)</span>, and <span
+class="math inline">\(\pi_a\)</span>.</li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="effect-size" class="section level4">
+<h4>3.4 Effect size</h4>
+<ul>
+<li>Power depends only on:
+<ul>
+<li><span class="math inline">\(n\)</span>, the sample size</li>
+<li>the difference between the null and alternative proportions also
+known as <strong>effect size</strong></li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="power-and-sample-size-given-pi_a-and-n" class="section level4">
+<h4>3.5 Power and sample size (given <span
+class="math inline">\(\pi_a\)</span> and <span
+class="math inline">\(n\)</span>)</h4>
+<ul>
+<li>What is the samllest sample size <span
+class="math inline">\(n\)</span> that we need to achieve a given power?
+<ul>
+<li>Very common question in biostatistics</li>
+<li>Because when we are testing experimental treatments on patients, we
+do not want to harm patients unnecessarily.</li>
+</ul></li>
+</ul>
+<p><br></p>
+<blockquote>
+<p>It is a moral obligation to:</p>
+<ul>
+<li>&lt;1&gt; collect a sample size large enough to be able to prove an
+effect if there is one.</li>
+<li>&lt;2&gt; collect a sample size small enough to avoid potentially
+harming many people.</li>
+</ul>
+</blockquote>
+<ul>
+<li>This process is generally refeered to as <strong>power
+calculation</strong></li>
+<li>It involves making decisions on:
+<ul>
+<li><span class="math inline">\(\alpha\)</span>: a significance
+level</li>
+<li><span class="math inline">\(\pi_a\)</span>: we want to be able to
+detect</li>
+<li><span class="math inline">\(1-\beta\)</span>: the power of the
+test</li>
+</ul></li>
+</ul>
+<p><br></p>
+<ul>
+<li>Example: suppose that we want a 80% chance to reject <span
+class="math inline">\(H_0: 0.5\)</span> at <span
+class="math inline">\(\alpha=0.01\)</span> if the true proportion is
+<span class="math inline">\(\pi_a=0.65\)</span> with one-sided test.
+What is the smallest sample size <span class="math inline">\(n\)</span>
+that we need?</li>
+<li>The given information is:
+<ul>
+<li><span class="math inline">\(1-\beta=0.80\)</span></li>
+<li><span class="math inline">\(\pi_a=0.5\)</span></li>
+<li><span class="math inline">\(\alpha=0.01\)</span></li>
+<li><span class="math inline">\(\pi_a=0.65\)</span></li>
+</ul></li>
+<li><code>R</code>: <code>propTestN</code></li>
+</ul>
+<pre class="r"><code>sampleSize &lt;- propTestN(0.65, 0.5, alpha = 0.01, power = 0.80,
+                        sample.type = &quot;one.sample&quot;,
+                        alternative = &quot;greater&quot;,
+                        approx=FALSE) 
+sampleSize</code></pre>
+<pre><code>## $n
+## [1] 114
+## 
+## $power
+## [1] 0.817283
+## 
+## $alpha
+## [1] 0.009405374
+## 
+## $q.critical.upper
+## [1] 69</code></pre>
+<ul>
+<li>Set <code>approx=F</code>: the function compute the sample size
+using the exact binomial.
+<ul>
+<li><code>approx=T</code>: the function uses a normal approximation to
+the binomial.</li>
+</ul></li>
+<li>Since the function uses an exact binomial, it is not possible
+sometimes to get the exact power and <span
+class="math inline">\(\alpha\)</span> that are stated.
+<ul>
+<li>This is because of the discreteness of binomial distribution.</li>
+</ul></li>
+<li>The program determines the value as close as possible doing a
+search.</li>
+<li>Conclusion: the required sample size would be 114 with one-sided
+<span class="math inline">\(alpha=0.01\)</span> and power of 81.7%.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="what-is-the-minimum-detectable-difference-given-n-power"
+class="section level4">
+<h4>3.6 What is the minimum detectable difference? (given <span
+class="math inline">\(n\)</span>, power)</h4>
+<ul>
+<li><code>propTestMdd</code> in the <code>EnvStats</code> package is the
+function to determine the <strong>minimum detectable difference</strong>
+if the sample size <span class="math inline">\(n\)</span> is known and
+for a desired level of power.</li>
+<li>e.g. Suppose we have a sample size 100 and want 90% power with <span
+class="math inline">\(alpha=0.05\)</span>, one-sided significance.</li>
+</ul>
+<pre class="r"><code>propDetectDiff &lt;- propTestMdd(100, 0.50, alpha = 0.05, power = .9,
+                              sample.type = &quot;one.sample&quot;,
+                              alternative = &quot;greater&quot;,
+                              approx=FALSE)
+propDetectDiff</code></pre>
+<pre><code>## $delta
+## [1] 0.1465346
+## 
+## $power
+## [1] 0.9
+## 
+## $alpha
+## [1] 0.04431304
+## 
+## $q.critical.upper
+## [1] 58</code></pre>
+<ul>
+<li>Since the function is using an exact binomial, it is not possible
+sometimes to get the exact <span class="math inline">\(alpha\)</span>
+that was stated.
+<ul>
+<li>This is because of the discreteness of a binomial distribution.</li>
+</ul></li>
+<li>The program determines the value as close as possible doing a
+search.</li>
+<li>Conclusion: for a power of 90% and a sample size of 100, the minimum
+detectable difference is 0.15 with one-sided <span
+class="math inline">\(\alpha=0.01\)</span>.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="summing-up" class="section level4">
+<h4>3.7 Summing up</h4>
+<ul>
+<li>As the difference between means increases, power increases.</li>
+<li>As the sample size increases, power increases.</li>
+<li>As the significance level increases, power increases.</li>
+</ul>
+<p><br></p>
+<ul>
+<li>To compute the <strong>sample size</strong>, for a single population
+proportion using an exact binomial, use <code>propTestN()</code>.
+<ul>
+<li>You need <strong>power</strong>, <strong>significance level</strong>
+<span class="math inline">\(\alpha\)</span>, and the <strong>difference
+to detect</strong>.</li>
+</ul></li>
+<li>To compute the <strong>power</strong> for a sample of a single
+population proportion using an exact binomial, use
+<code>propTestPower()</code>.
+<ul>
+<li>You need the <strong>sample size</strong> <span
+class="math inline">\(n\)</span>, <strong>significance level</strong>
+<span class="math inline">\(\alpha\)</span>, and the <strong>difference
+to detect</strong>.</li>
+</ul></li>
+<li>To compute the <strong>minimal detectable difference</strong> for a
+single population proportion using an exact binomal, use
+<code>propTestMdd()</code>.
+<ul>
+<li>You need the <strong>sample size</strong> <span
+class="math inline">\(n\)</span>, <strong>significance level</strong>
+<span class="math inline">\(\alpha\)</span>, and the
+<strong>power</strong>.</li>
+</ul></li>
+</ul>
+<p><br><br><br></p>
+<p><a href="toc.html">&lt; Back to Syllabus</a></p>
+<p><br><br><br></p>
+</div>
+</div>
+
+<br><br>
+<footer>
+  <p class="copyright text-muted" align="center">Copyright &copy; 2024 Cold Spring Harbor Laboratory</p>
+</footer>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

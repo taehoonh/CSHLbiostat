@@ -258,8 +258,20 @@ $(document).ready(function () {
         <li>
   <a href="services.html">Services</a>
 </li>
-<li>
-  <a href="training.html">Training</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Training
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="biostatistics_course.html">Biostatistics Course</a>
+    </li>
+    <li>
+      <a href="toc.html">Intro to Statistics</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="communication.html">Communication</a>
@@ -284,11 +296,12 @@ $(document).ready(function () {
 
 
 <p><br><br></p>
+<p><link rel="stylesheet" href="styles.css" type="text/css">
+<link rel="stylesheet" href="site_libs/academicons-1.9.1/css/academicons.min.css"/></p>
 <p align="center">
 <img src="images/biostat_core_logo.png" alt="logo" style="width:85%; border:0.5px solid; margin-right: 20px" align="center">
 </p>
 <p><br></p>
-<p><strong>Overview</strong></p>
 <p>Welcome to the Biostatistics Core at CSHL, where we are dedicated to
 enhancing the research quality and output of our faculty, staff, and
 students. Offering a broad spectrum of statistical consulting services,

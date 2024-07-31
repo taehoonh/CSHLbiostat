@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Week 2-1. Statistical inference</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Cold Spring Harbor Laboratory Biostatistics</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="services.html">Services</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Training
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="biostatistics_course.html">Biostatistics Course</a>
+    </li>
+    <li>
+      <a href="toc.html">Intro to Statistics</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="communication.html">Communication</a>
+</li>
+<li>
+  <a href="https://github.com/taehoonh/CSHLbiostat">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<!-- <link rel="stylesheet" href="styles.css" type="text/css"> -->
+<p><br><br><br></p>
+<p><a href="toc.html">&lt; Back to Syllabus</a></p>
+<p><br><br><br></p>
+<div id="statistical-inference" class="section level3">
+<h3>1. Statistical Inference</h3>
+<ul>
+<li><p>the process of learning some properties of the population
+starting from a sample drawn from this population.</p></li>
+<li><p>For example, you may be in interested in learning about the
+cholesterol level of patient with heart disease, but we cannot measure
+the whole population.</p></li>
+<li><p>But you can measure the cholesterol level of a <strong>random
+sample</strong> of the population and then <strong>infer</strong> or
+generalize the results to the entire population.</p></li>
+<li><p>Terms we need to clarify:</p>
+<ul>
+<li><strong>Data generating distribution</strong>: the
+<strong>unknown</strong> probability distribution that generates the
+data.</li>
+<li><strong>Empirical distribution</strong>: the <strong>observable
+distribution of the data in the sample.</strong></li>
+<li><strong>Parameter</strong>: unknown object of interest</li>
+<li><strong>Estimator</strong>: data-driven guess at the value of the
+parameter.</li>
+</ul></li>
+<li><p>Usually we are interested in a <strong>function</strong> of the
+data generating distribution. This is often referred to as
+<strong>parameter</strong> (or the <strong>parameter of
+interest</strong>)</p></li>
+<li><p>Use <strong>sample</strong> in order to estimate the
+<strong>parameter of interest</strong></p></li>
+<li><p>Use a function of empriical distribution, referred to as
+<strong>estimator</strong>.</p></li>
+<li><p>(Mathematical notation) for parameters, Greek letters, while for
+estimate, Roman letter.</p></li>
+<li><p>(Mathematical notation) “hat” notation places a “hat” over the
+Greek letter for the parameter.</p>
+<ul>
+<li>e.g. <span class="math inline">\(\hat{\theta}\)</span> is the
+estimator of the parameter <span
+class="math inline">\(\theta\)</span>.</li>
+<li>e.g. <span class="math inline">\(\hat{\theta}_n\)</span> is used
+when you specifically want to <strong>emphasize</strong> that we are
+using a sample of <span class="math inline">\(n\)</span> observations to
+estimate the parameter.</li>
+</ul></li>
+</ul>
+</div>
+<div id="example-cholesterol-values-in-patients-with-heart-disease"
+class="section level3">
+<h3>2. Example: Cholesterol values in patients with heart disease</h3>
+<p>Let’s assume that we want to estimate the average cholesterol value
+of healthy individuals in the United States. Let’s assume that we have
+cholesterol measurements for a random sample of the population (more on
+this later!).</p>
+<ul>
+<li><em>Parameter of Interest</em>: the mean cholesterol value of heart
+patients in the population, denoted as <span
+class="math inline">\(\mu\)</span></li>
+<li><em>How can we estimate the parameter using the data in our
+sample?</em>
+<ul>
+<li>We would estimate the population mean cholesterol level <span
+class="math inline">\(\mu\)</span> with the mean (or average)
+cholesterol values computed from our sample, denoted by <span
+class="math inline">\(\hat{\mu}\)</span> or <span
+class="math inline">\(\bar{x}\)</span>.</li>
+</ul></li>
+</ul>
+</div>
+<div id="more-on-the-data-generating-distribution"
+class="section level3">
+<h3>3. More on the data generating distribution</h3>
+<p>The data generating distribution is unknown when we collect a sample
+from a population. In <strong>non-parametric statistics</strong> we aim
+at estimating this distribution from the empirical distribution of the
+sample, without making any assumptions on the shape of the distribution
+for the population values. However, it is often easier to make
+<strong>some assumptions</strong> about the data generating
+distribution. These assumptions are sometimes based on domain knowledge
+or on mathematical convenience.</p>
+<p>One commonly used strategy is to assume a <strong>family of
+distributions</strong> for the data generating distribution, for
+instance the <strong>Gaussian distribution</strong> or <strong>normal
+distribution</strong>.</p>
+</div>
+<div id="random-variables-and-probability-distributions"
+class="section level3">
+<h3>4. Random Variables and Probability Distributions</h3>
+<div id="probability" class="section level4">
+<h4>1) Probability</h4>
+<p>In order to make inference from a <strong>random</strong> sample to
+the whole population, we need some notion of
+<strong>randomness</strong>. To study randomness we need the concept of
+<strong>probability</strong>. Hence, probability is one of the
+foundations of statistical inference.</p>
+<ul>
+<li>What is a probability measure?
+<ul>
+<li>Long story short, our main interest is a probability as a measure
+that quntifies the randomness of an event
+<ul>
+<li>e.g. the probability of obtaining ‘heads’ when tossing a coin.</li>
+</ul></li>
+</ul></li>
+<li>Principles
+<ul>
+<li>The probability of an event is a number between 0 and 1.</li>
+<li>The sum of the probabilities of all possible events is 1.</li>
+<li>The probability of the union of two disjoint events is the sum of
+their probabilities.</li>
+<li>The probability of two independent events occurring is the product
+of their probabilities.</li>
+</ul></li>
+</ul>
+</div>
+<div id="random-variables" class="section level4">
+<h4>2) Random variables</h4>
+<p>Recall that a <strong>variable</strong> is a measurement that
+describe a characteristic of a set of observations. A <strong>random
+variable</strong> (r.v.) is a variable that measures an intrinsically
+random process, e.g. a coin toss. Before observing the outcome, we will
+not know with certainty whether the toss will yield “heads” or “tails”,
+but that does not mean that we do not know <strong>anything</strong>
+about the process: we know that on average it will be heads half of the
+times and tails the other half. If we refer to <strong><span
+class="math inline">\(X\)</span></strong> as the process of measuring
+the outcome of a coin toss, we say that <span
+class="math inline">\(X\)</span> is a <strong>random
+variable</strong>.</p>
+<ul>
+<li>Random variables and statistical inference
+<ul>
+<li>For instance, let’s say that we want to describe the height of a
+certain population. The height of an individual is not a random
+quantity! We can measure with a certain amount of precision the height
+of any individual.</li>
+<li>What is random is the process of <strong>sampling a set of
+individuals</strong> from the population?
+<ul>
+<li>The randomness is the particular set of individuals (and their
+heights) that we get from the population. The height of a known
+individual in our sample is not random. Rather the fact that this
+particular individual is in our sample is random. Hence, the individuals
+that compose our particular sample is random. If two researchers each
+took a random sample of 100 adults from the population, they each would
+have a diﬀerent set of individuals (with maybe a few people being in
+both sets).</li>
+<li>the randomness comes from the sampling mechanism, not from the
+quantity that we are measuring: if we repeat the experiment, we will
+select a diﬀerent sample and we will obtain a diﬀerent set of
+measurements.</li>
+</ul></li>
+</ul></li>
+<li>Continuous and discrete random variables
+<ul>
+<li>A <strong>discrete random variable</strong> can only take a
+countable number of possible outcomes (e.g., a coin ﬂip, or the number
+of operations a patient has had).</li>
+<li>A <strong>continuous random variable</strong> can take any real
+value. An example of a continuous random variable is the weight of a
+participant in a clinical trial.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="probability-distributions" class="section level3">
+<h3>5. Probability distributions</h3>
+<ul>
+<li>4 key quantities:
+<ul>
+<li>Probability Mass Function (PMF) for discrete / Probability Density
+Function (PDF) for continuous</li>
+<li>Cumulative Distribution Function (CDF)</li>
+<li>Quantiles</li>
+<li>Expected Value</li>
+</ul></li>
+</ul>
+</div>
+<div id="probability-mass-function-pmf" class="section level3">
+<h3>6. Probability Mass Function (PMF)</h3>
+<ul>
+<li><p><span class="math inline">\(S\)</span>: Sample space or the space
+of all the possible values of <span
+class="math inline">\(X\)</span></p></li>
+<li><p>The PMF of a <strong>discrete random variable <span
+class="math inline">\(X\)</span></strong> is a function <span
+class="math inline">\(p\)</span> with the follwing properties.</p>
+<ul>
+<li>Non-negativity</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+p(x)&gt;=0 \quad \forall x) \in S
+\]</span></p>
+<ul>
+<li>Sum across all values is one</li>
+</ul>
+<p><span class="math display">\[
+\sum_{x \in S} p(x)=1
+\]</span></p>
+<ul>
+<li>Example: Number of heads in 10 coin flips</li>
+</ul>
+<pre class="r"><code>set.seed(1)
+rbinom(n = 1, size = 10, prob = 0.5)</code></pre>
+<pre><code>## [1] 4</code></pre>
+<ul>
+<li>If we repeat the experiment,</li>
+</ul>
+<pre class="r"><code>rbinom(n = 1, size = 10, prob = 0.5)</code></pre>
+<pre><code>## [1] 4</code></pre>
+<ul>
+<li>Different result</li>
+<li>Now we could ask, if we ﬂip a coin 10 times, what is the probability
+of getting 0 heads? 1 heads? 2 heads, . . . 10 heads?
+<ul>
+<li>Since this is all the possibilities, this set of probabilities is
+the PMF.</li>
+</ul></li>
+<li>What is the the PMF, e.g. what is the probability distribution of
+ﬂipping a coin 10 times?
+<ul>
+<li>One way to answer is by repeating the experiment many, many times,
+say 1,000. We can have R repeat this experiment for us rather than us
+doing this tedious work.</li>
+</ul></li>
+</ul>
+<pre class="r"><code>(x &lt;- rbinom(n = 1000, size = 10, prob = 0.5))</code></pre>
+<pre><code>##    [1]  5  7  4  7  7  6  6  3  4  4  6  5  6  5  6  9  5  6  7  4  6  3  4  5
+##   [25]  2  5  7  4  5  5  5  4  6  6  6  3  6  5  6  6  6  5  5  6  2  5  6  6
+##   [49]  5  7  5  4  3  3  4  5  6  5  7  4  5  4  6  4  5  6  3  7  4  7  4  4
+##   [73]  5  7  7  5  6  8  5  6  5  4  6  4  6  3  4  3  4  3  6  7  6  6  5  5
+##   [97]  6  5  6  4  4  9  6  4  3  5  7  5  8  6  4  5  3  2  6  3  5  6  9  5
+##  [121]  5  4  6  5  5  4  4  5  5  3  2  6  7  5  5  5  8  5  6  5  4  4  6  5
+##  [145]  4  6  3  7  5  5  4  5  5  4  5  3  4  4  4  7  5  6  7  5  3  4  6  4
+##  [169]  6  7  7  5  5  7  6  6  5  7  4  4  7  5  7  4  6  6  7  5  6  5  3  7
+##  [193]  4  5  3  7  4  6  4  4  5  4  4  5  5  3  4  6  8  3  6  8  6  4  6  8
+##  [217]  8  4  4  3  4  5  7  5  4  2  5  7  4  3  4  6  5  6  6  5  5  5  4  5
+##  [241]  7  3  5  4  5  3  5  7  6  7  5  5  5  3  4  5  4  7  5  4  4  6  6  3
+##  [265]  3  6  5  3  3  3  5  3  4  4  4  4  5  6  2  5  7  4  2  3  4  3  3  4
+##  [289]  4  3  8  4  5  6  3  3  2  7  6  3  5  5  4  9  4  6  3  5  3  4  7  6
+##  [313]  4  5  3  4  8  6  6  4  5  9  7  8  6  6  4  6  8  4  5  6  3  4  5  3
+##  [337]  5  8  9  4  5  5  6  4  5  3  4  6  5  3  6  5  8  4  7  3  7  5  3  4
+##  [361]  7  4  5  7  3  6  6  5  5  5  7  4  4  5  4  7  4  5  5  5  6  8  4  4
+##  [385]  6  7  3  8  3  3  7  5  3  4  6  4  4  3  6  4  8  7  7  6  4  6  2  7
+##  [409]  9  4  6  6  6  5  5  4  6  6  5  5  6  3  4  5  3  7  7  7  7  3  5  5
+##  [433]  3  6  6  2  5  7  2  4  5  5  4  5  4  7  3  3  8  5  4  3  2  6  5  8
+##  [457]  5  3  3  5  1  5  4  7  6  3  5  6  5  8  6  5  3  4  7  5  5  6  6  3
+##  [481]  7  8  5  5  4  1  7  3  2  7  4  3  5  5  5  5  7  3  5  6  6  6  5  8
+##  [505]  5  7  6  5  7  5  1  6  6  4  6  5  4  6  7  6  4  3  5  7  6  6  8  9
+##  [529]  5  2  4  4  3  2  4  4  4  5  5  8  6  4  4  3  9  5  5  6  7  5  2  7
+##  [553]  6  5  3  2  6  7  6  3  4  6  7  6  4  6  4  8  3  5  4  3  6  5  6  5
+##  [577]  7  6  4  8  6  2  5  5  3  5  8  6  5  4  6  6  7  6  5  5  5  5  6  7
+##  [601]  3  6  8  8  4  5  8  3  7  4  5  5  6  5  3  4  6  3  7  4  5  3  4  5
+##  [625]  4  6  5  7  7  4  4  7  5  4  3  3  6  6  7  4  7  4  6  4  2  7  6  7
+##  [649]  6  7  4  5  5  3  4  5  6  7  4  6  3  6  4  5  7  4  4  6  6  5  6  5
+##  [673]  5  5  4  3  4  4  6  6  3  5  5  5  5  5  2  7  3  5  6  5  5  5  6  3
+##  [697]  8  5  7  7  6  6  6  3  5  5  7  6  6  5  3  6  5  5  2  3  5  6  1  5
+##  [721]  7  6  4  7  4  5  5  2  6  5  6  2  6  4  4  7  3  2  4  5  5  4  4  5
+##  [745]  5  7  3  6  5  7  5  3  5  4  5  4  8  5  6  3  7  4  4  3  5  6  7  6
+##  [769]  5  6  2  9  6  5  2  6  4 10  7  6  6  5  7  3  5  4  5  2  4  3  7  4
+##  [793]  5  6  4  5  6  4  7  2  8  6  4  6  4  8  4  2  4  5  4  8  5  5  7  7
+##  [817]  4  6  4  5  6  6  7  2  4  4  4  6  6  7  7  6  5  5  3  7  8  5  7  3
+##  [841]  4  5  5  5  2  6  6  4  8  6  2  8  4  2  4  6  4  4  2  4  6  2  3  5
+##  [865]  5  6  6  3  5  8  6  4  5  2  4  5  6  9  4  7  8  7  5  6  6  6  5  4
+##  [889]  1  3  3  2  4  3  5  2  1  3  7  6  4  4  4  3  3  3  3  2  5  6  6  3
+##  [913]  2  5  3  6  6  7  4  8  8  2  7  6  6  4  5  5  5  7  4  4  6  6  7  5
+##  [937]  7  4  4  7  2  5  5  5  6  6  7  6  3  4  6  7  5  4  7  4  5  1  4  5
+##  [961]  3  6  4  4  4  7  9  6  9  5  5  8  3  3  2  5  6  6  3  3  8  5  4  5
+##  [985]  5  4 10  5  3  5  5  4  3  6  6  4  4  4  5  6</code></pre>
+<ul>
+<li>x: the number of times we got 0, 1, 2, 3, …, 10 head out of 10 flips
+of a fair coin in 1000 experiments.</li>
+<li>Plot the probability distribution based on 1000 experiments</li>
+</ul>
+<pre class="r"><code>plot(table(x) / sum(table(x)), type = &#39;h&#39;, col = 2, lwd = 4,
+    xlab = &quot;Number of Successes&quot;,
+    ylab = &quot;relative frequency&quot;,
+    main = &quot;Number of heads in 10 coin flips, repeated 1,000 times&quot;)</code></pre>
+<p><img src="stat_seminar_wk02-1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="example-of-pmf-binomial-distribution" class="section level3">
+<h3>7. Example of PMF: Binomial Distribution</h3>
+<ul>
+<li>There is also a mathematical formula that describes the PMF for the
+number of heads when ﬂipping a fair coin 10 times. It is called the
+<strong>binomial distribution</strong>.</li>
+<li>PMF of the number of successes out of <span
+class="math inline">\(n\)</span>tries where a probability of success is
+<span class="math inline">\(\pi\)</span> is</li>
+</ul>
+<div id="dbinom-function--1" class="section level4">
+<h4>1) <code>dbinom()</code> function -1</h4>
+<ul>
+<li><strong><code>dbinom()</code></strong> function can be used to
+compute the binomial PMF.
+<ul>
+<li><strong><code>x</code></strong>: the number of “successes”, which in
+this case is the number of heads.</li>
+<li><strong>size</strong>: the number of “tries”, which in this case 10
+flips</li>
+<li><strong>prob</strong>: the probability of getting a success in a
+single try, which in this case is the probability of getting a head in
+one flip, 0.5.</li>
+</ul></li>
+</ul>
+<pre class="r"><code>dbinom(x = 5, size = 10, prob = 0.5)</code></pre>
+<pre><code>## [1] 0.2460938</code></pre>
+</div>
+<div id="dbinom-function--2" class="section level4">
+<h4>2) <code>dbinom()</code> function -2</h4>
+<ul>
+<li><strong><code>dbinom()</code></strong> also can be used to show the
+entire distribution by <strong>setting up x as a vector</strong>.
+<ul>
+<li>If we have 10 tries (ﬂips), then the set of the possible number of
+successes (heads) is x = 0, 1, 2, . . . , 10. We will save the
+probabilities in a variable ‘p’.</li>
+</ul></li>
+</ul>
+<pre class="r"><code>(p &lt;- dbinom(x = 0:10, size = 10, prob = 0.5))</code></pre>
+<pre><code>##  [1] 0.0009765625 0.0097656250 0.0439453125 0.1171875000 0.2050781250
+##  [6] 0.2460937500 0.2050781250 0.1171875000 0.0439453125 0.0097656250
+## [11] 0.0009765625</code></pre>
+</div>
+<div id="plotting-the-binomial-distributions-pmf"
+class="section level4">
+<h4>3) plotting the binomial distribution’s PMF</h4>
+<ul>
+<li>x-axis: the possible values of the random variable</li>
+<li>y-axis: the probability of observing that value</li>
+</ul>
+<pre class="r"><code>pmf &lt;- as.table(p)
+names(pmf) &lt;- 0:10
+plot(pmf, col = 2, lwd = 4,
+    xlab = &quot;Number of Successes&quot;,
+    ylab = &quot;PMF&quot;,
+    main = &quot;PMF of the Binomial Distribution&quot;)</code></pre>
+<p><img src="stat_seminar_wk02-1_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="accuracy-of-the-simulation" class="section level4">
+<h4>4) Accuracy of the simulation</h4>
+<ul>
+<li>We can verify that our simulation was actually quite accurate.
+<ul>
+<li>Speciﬁcally, recall that we used
+<strong><code>rbinom()</code></strong> function to simulate performing
+the experiment of 10 coin ﬂips 1000 times and for each experiment of 10
+ﬂips, <strong>we recorded the number of heads</strong>.</li>
+<li>Let’s compare how our computed distribution for the probability of
+each outcome compares to the exact probability obtained from the
+mathematical formula for the binomial PMF.</li>
+</ul></li>
+</ul>
+<pre class="r"><code>table(x) / sum(table(x))</code></pre>
+<pre><code>## x
+##     1     2     3     4     5     6     7     8     9    10 
+## 0.007 0.043 0.121 0.203 0.248 0.203 0.117 0.043 0.013 0.002</code></pre>
+<pre class="r"><code>round(pmf, 3)</code></pre>
+<pre><code>##     0     1     2     3     4     5     6     7     8     9    10 
+## 0.001 0.010 0.044 0.117 0.205 0.246 0.205 0.117 0.044 0.010 0.001</code></pre>
+</div>
+</div>
+<div id="probability-density-function-pdf-i.e.-density-function"
+class="section level3">
+<h3>8. Probability Density Function (PDF) (i.e., density function)</h3>
+<ul>
+<li>The analog of the PMF for <strong>continuous distributions</strong>
+is the <strong>probability density function</strong>, or simply
+<strong>density function</strong>.</li>
+<li>The properties of the PDF are similar to those of the PMF, but
+<strong>extended to the case of real numbers</strong>.
+<ul>
+<li>Non-negativity:</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+p(x)&gt;=0 \quad \forall x) \in S
+\]</span></p>
+<ul>
+<li>The total area under the curve is 1:</li>
+</ul>
+<p><span class="math display">\[
+\int_{x \in S} f(x)=1
+\]</span></p>
+<ul>
+<li>Areas under the PDF represent probabilities.
+<ul>
+<li>In particular, the probability of an individual value.</li>
+<li>Say <span class="math inline">\(x\)</span> is 0. However, the
+probability of <span class="math inline">\(x-\delta x \text { to }
+x+\delta x\)</span> is a number greater than 0 for any <span
+class="math inline">\(\delta\)</span>, no matter how small.</li>
+</ul></li>
+</ul>
+</div>
+<div id="example-of-pdf-gaussian-normal-distribution"
+class="section level3">
+<h3>9. Example of PDF: Gaussian (Normal) Distribution</h3>
+<ul>
+<li>To denote a particular normal distribution, you need to specify its
+<strong>mean</strong> and its <strong>variance</strong>.</li>
+<li>A <strong>standard normal</strong> is a normal random variable with
+<strong>mean zero and variance of one</strong>.</li>
+</ul>
+<p><span class="math display">\[
+f(x)=\frac{1}{\sqrt{2 \pi \sigma^{2}}} e^{-\frac{(x-\mu)^{2}}{2
+\sigma^{2}}}, \text { where }-\infty&lt;x&lt;\infty
+\]</span></p>
+<ul>
+<li>Plotting the normal distribution</li>
+</ul>
+<pre class="r"><code>curve(dnorm, from = -4, to = 4,
+     xlab = &#39;x&#39;,
+     ylab = &quot;PDF&quot;,
+     main = &quot;PDF of Standard Normal Distribution&quot;)</code></pre>
+<p><img src="stat_seminar_wk02-1_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<ul>
+<li>Just like <strong><code>dbinom()</code></strong>, we can use
+<strong><code>dnorm()</code></strong> function to get the value of the
+<strong>density</strong> for any real number.</li>
+<li>However, this is <strong>NOT</strong> the probability of getting
+that value
+<ul>
+<li><strong><code>dnorm(1)</code></strong> gives the
+<strong><code>f(1)</code></strong>, which is the value from the curve
+for a standard normal distribution (<strong>since specific values for
+the mean and standard deviation were note specified</strong>) and it is
+<strong>NOT</strong> the probability of getting a 1 from a standard
+normal distribution.</li>
+<li>Instead, this probability would be <strong>0 (zero)</strong>.</li>
+</ul></li>
+<li><strong>(NOTE)</strong> <strong>PDF does not give you the
+probability of the event!</strong></li>
+<li><strong>Since continuous variables can take inﬁnite number of
+values, the probability of any speciﬁc value is 0. (otherwise the sum
+under the curve would be greater than 1).</strong></li>
+<li>Thus, we always make statements on the <strong>probabilities of
+intervals</strong>.
+<ul>
+<li>e.g. if X is a standard normal random variable, what is the
+probability that X is less than -1?</li>
+</ul></li>
+</ul>
+<pre class="r"><code>curve(dnorm, from = -4, to = 4,
+     ylab = &#39;PDF&#39;,
+     main = &#39;Pr(X &lt;= -1)&#39;)
+coord.x &lt;- c(-4, seq(-4, -1, by = 0.1), -1)
+coord.y &lt;- c(0, dnorm(seq(-4, -1, by = 0.1)), 0)
+polygon(coord.x, coord.y, col = 2)</code></pre>
+<p><img src="stat_seminar_wk02-1_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+<div id="cumulative-distribution-function-cdf" class="section level3">
+<h3>10. Cumulative Distribution Function (CDF)</h3>
+<ul>
+<li>One important quantity linked to the area under the PDF is the
+<strong>cumulative distribution function</strong>.</li>
+<li>the probability that a random variable is less or equal than a
+certain number.</li>
+</ul>
+<p><span class="math display">\[
+F(x)=\operatorname{Pr}(X \leq x)
+\]</span></p>
+<ul>
+<li>Both applies to <strong>continuous</strong> and
+<strong>discrete</strong> random variables.
+<ul>
+<li>Relationship between PDF-CDF:</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+F(x)=\int_{X \leq x} f(x) d x
+\]</span></p>
+<ul>
+<li>Relationship between PMF-CDF:</li>
+</ul>
+<p><span class="math display">\[
+F(x)=\sum_{X \leq x} p(x) d x
+\]</span></p>
+<div id="example-gaussian-normal-distribution" class="section level4">
+<h4>Example: Gaussian (Normal) Distribution</h4>
+<ul>
+<li><strong><code>pnorm()</code></strong>: to compute the
+<strong>CDF</strong> of the normal distribution variable, or to compute
+the probability of any <strong>interval</strong>.
+<ul>
+<li>e.g. the probability that <span class="math inline">\(X\)</span> is
+less than -1 is</li>
+</ul></li>
+</ul>
+<pre class="r"><code>pnorm(-1, 0, 1)</code></pre>
+<pre><code>## [1] 0.1586553</code></pre>
+<ul>
+<li>e.g. <strong><em>Pr(X&gt;2)=1-Pr(X&lt;=2)=1-F(2)</em></strong></li>
+</ul>
+<pre class="r"><code>1 - pnorm(2)</code></pre>
+<pre><code>## [1] 0.02275013</code></pre>
+<ul>
+<li>e.g. the probability that <span class="math inline">\(X\)</span> is
+between -1 and 1</li>
+<li>i.e., <strong><em>Pr(-1&lt;=X&lt;=1)=Pr(X&lt;=1) - Pr(X&lt;=-1) =
+F(1) - F(-1)</em></strong></li>
+</ul>
+<pre class="r"><code>pnorm(1) - pnorm(-1)</code></pre>
+<pre><code>## [1] 0.6826895</code></pre>
+</div>
+</div>
+<div id="quantiles" class="section level3">
+<h3>11. Quantiles</h3>
+<ul>
+<li>the <span class="math inline">\(p\)</span> quantile is the number
+<span class="math inline">\(q\)</span> such that <span
+class="math inline">\(p\)</span> X 100% of the observations are less
+than or equal to <span class="math inline">\(q\)</span>.</li>
+</ul>
+<p><span class="math display">\[
+F(q)=\operatorname{Pr}(X \leq q)=p
+\]</span></p>
+<ul>
+<li>Note that we are interested in the quantile <span
+class="math inline">\(q\)</span>, after fixing the probability <span
+class="math inline">\(p\)</span>, therefore</li>
+</ul>
+<p><span class="math display">\[
+q=F^{-1}(p)
+\]</span></p>
+<div id="example-gaussian-normal-distribution-1" class="section level4">
+<h4>Example: Gaussian (Normal) Distribution</h4>
+<ul>
+<li><strong><code>qnorm()</code></strong>: to compute the quantiles of
+the standard normal distribution.
+<ul>
+<li>e.g. 0.95-quantile for a standard normal</li>
+</ul></li>
+</ul>
+<pre class="r"><code>qnorm(0.95) # equal to qnorm(0.95, 0, 1)</code></pre>
+<pre><code>## [1] 1.644854</code></pre>
+</div>
+</div>
+<div id="summary-pdf-cdf-and-quantiles-in-r" class="section level3">
+<h3>12. Summary: PDF, CDF, and quantiles in R</h3>
+<ul>
+<li><strong><code>dnorm()</code></strong>: to compute the PDF of a
+normal random variable</li>
+<li><strong><code>pnorm()</code></strong>: to compute its CDF</li>
+<li><strong><code>qnorm()</code></strong>: to compute is quantile.</li>
+<li><strong><code>rnorm()</code></strong>: to generate (siulate) a
+random sample from the normal distribution</li>
+</ul>
+</div>
+<div id="expected-value-and-variance" class="section level3">
+<h3>13. Expected Value and Variance</h3>
+<div id="expected-value" class="section level4">
+<h4>1) Expected Value</h4>
+<ul>
+<li><p>The <strong>expected value</strong> or <strong>mean</strong> of a
+random variable is the <strong>center of its
+distribution</strong>.</p></li>
+<li><p>In case <span class="math inline">\(X\)</span> is a discrete
+random variable, the expected value is</p></li>
+</ul>
+<p><span class="math display">\[
+E[X]=\sum_{x \in S} x p(x)
+\]</span></p>
+<p>where <strong><em>p(x)</em></strong> is the <strong>PMF of
+X</strong>.</p>
+<ul>
+<li>In case <span class="math inline">\(X\)</span> is a continuous
+random variable, the expected value is</li>
+</ul>
+<p><span class="math display">\[
+E[X]=\int_{x \in S} x f(x) d x
+\]</span></p>
+<p>where <strong><em>f(x)</em></strong> is the <strong>PDF of
+X</strong>.</p>
+</div>
+<div id="expected-value-and-sample-mean" class="section level4">
+<h4>2) Expected Value and Sample Mean</h4>
+<ul>
+<li><strong>Sample mean</strong> is what we will use to
+<strong>estimate</strong> the <strong>expected value</strong>, or the
+mean of the data generating distribution.</li>
+<li><strong>Sample mean</strong>: the mean of the <strong>empricial
+distribution of the sample</strong>, which is obtained by giving
+probability 1/n to each observed value.</li>
+</ul>
+<p><span class="math display">\[
+p_{n}(x)=\sum_{i=1}^{n} x_{i} p_{n}\left(x_{i}\right)=\frac{1}{n}
+\sum_{i=1}^{n} x_{i}
+\]</span></p>
+</div>
+<div id="variance" class="section level4">
+<h4>3) Variance</h4>
+<ul>
+<li><strong>Variance</strong> of a random variable is the following
+way.</li>
+<li>In case of the <span class="math inline">\(\mu\)</span>, the epected
+value of <span class="math inline">\(X\)</span>, the variance is</li>
+</ul>
+<p><span class="math display">\[
+\operatorname{Var}(X)=E\left[(X-\mu)^{2}\right]
+\]</span></p>
+<p><span class="math display">\[
+\operatorname{Var}(X)=E\left[X^{2}\right]-E[X]^{2}
+\]</span></p>
+</div>
+<div id="sample-variance" class="section level4">
+<h4>4) Sample Variance</h4>
+<ul>
+<li>Formula</li>
+</ul>
+<p><span class="math display">\[
+S^{2}=\frac{1}{n-1} \sum_{i=1}^{n}\left(x_{i}-\bar{x}\right)^{2}
+\]</span></p>
+<p>where <span class="math inline">\(\bar{x}\)</span> is sample
+mean.</p>
+<ul>
+<li>As the variance is the mean of the squared differences from the
+expected value, the sample variance is (almost) the mean of the squared
+differences from the sample mean.</li>
+</ul>
+<!-- #### 5) Example: Expected Value and Variance of the Binomial Distribution -->
+<!-- - The PMF of a binomial distribution is: ![binom pmf](https://ws4.sinaimg.cn/large/006tNbRwly1fw21tbvakfj308300v3yd.jpg) -->
+<!-- - The expected value and the variance are: ![evvar](https://ws3.sinaimg.cn/large/006tNbRwly1fw23xqc1k0j307800s745.jpg) -->
+<!-- - The expected value and the variance of the normal distribution is: ![ndevvar](https://ws4.sinaimg.cn/large/006tNbRwly1fw23z35fohj305h00uweb.jpg) -->
+</div>
+</div>
+<div id="parameters-of-a-distribution" class="section level3">
+<h3>14. Parameters of a distribution</h3>
+<ul>
+<li>binomial distribution
+<ul>
+<li><span class="math inline">\(n\)</span>: the number of trials</li>
+<li><span class="math inline">\(\pi\)</span>: the probability of
+success</li>
+</ul></li>
+<li>normal distribution
+<ul>
+<li><span class="math inline">\(\mu\)</span>: the expected value or the
+mean</li>
+<li><span class="math inline">\(\sigma\)</span>: standard deviation</li>
+</ul></li>
+</ul>
+<p><br><br><br></p>
+<p><a href="toc.html">&lt; Back to Syllabus</a></p>
+<p><br><br><br></p>
+</div>
+
+<br><br>
+<footer>
+  <p class="copyright text-muted" align="center">Copyright &copy; 2024 Cold Spring Harbor Laboratory</p>
+</footer>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

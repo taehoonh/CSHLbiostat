@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Week 2-2. Common distributions: Normal, Binomial, Poisson</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Cold Spring Harbor Laboratory Biostatistics</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="services.html">Services</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Training
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="biostatistics_course.html">Biostatistics Course</a>
+    </li>
+    <li>
+      <a href="toc.html">Intro to Statistics</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="communication.html">Communication</a>
+</li>
+<li>
+  <a href="https://github.com/taehoonh/CSHLbiostat">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<!-- <link rel="stylesheet" href="styles.css" type="text/css"> -->
+<p><br><br><br></p>
+<p><a href="toc.html">&lt; Back to Syllabus</a></p>
+<p><br><br><br></p>
+<div id="estimators" class="section level3">
+<h3>1. Estimators</h3>
+<div id="parameters-and-estimators" class="section level4">
+<h4>1.1 Parameters and Estimators</h4>
+<p>Recall that</p>
+<ul>
+<li><strong>Parameter</strong>: unknown object of interest</li>
+<li><strong>Estimator</strong>: data-driven guess of the value of the
+parameter
+<ul>
+<li>e.g. Binomial distribution has <strong>one unknown
+parameter</strong>: <strong>the probability of success, <span
+class="math inline">\(\pi\)</span></strong>.</li>
+<li>The other parameter, <span class="math inline">\(n\)</span>, is
+usually dictated by the researcher in terms of the size of a sample that
+will be obtained.</li>
+</ul></li>
+</ul>
+<p><br><br><br><br><br></p>
+</div>
+</div>
+<div id="review-binomial-random-variable" class="section level3">
+<h3>2. Review Binomial Random Variable</h3>
+<ul>
+<li>There are <strong>four conditions</strong> that characterize
+binomial data.
+<ul>
+<li>1&gt; The outcome or response takes on one and only one of two
+possibilities. This is a <strong>binary outcome</strong> or
+<strong>binary response</strong>.
+<ul>
+<li>The outcome of interest = <strong>success</strong></li>
+<li>The other = <strong>failure</strong></li>
+<li>Success does not necessarily mean that it is a ‘desirable’ outcome.
+For example, we may be interested in whether a patient dies or lives in
+hospital. In this case, we might denote the outcome death as a ‘success’
+if it were the outcome of interest.</li>
+</ul></li>
+<li>2&gt; The outcome is observed a known number of times. One
+observation of the outcome is sometimes called a <strong>Bernoulli
+trial</strong>. A binomial random variable is an observation of a set
+number, <strong><span class="math inline">\(n\)</span></strong> of
+<strong>Bernoulli trials</strong>.
+<ul>
+<li>A <strong>trial</strong> can be something like an individual attempt
+or try such as a flip of a coin.</li>
+<li>The outcome of interest = <strong>heads</strong> (maybe)<br />
+</li>
+<li>A <strong>trial</strong> could also be an individual and an outcome
+of interest is whether the individual tests positive for a disease.</li>
+</ul></li>
+<li>3&gt; The chance, or probability, that a particular outcome occurs
+is the same for each trial.
+<ul>
+<li>If we are sampling individuals, they all come <strong>from the same
+population</strong> and have the <strong>same chance of being
+created</strong>.</li>
+<li>If it is a test result, it assumes that the testing procedure is the
+same for each sample.</li>
+</ul></li>
+<li>4&gt; The outcome of one trial must not be influenced by the
+outcomes of other trials. (<strong>Independency</strong>)
+<ul>
+<li>An example where this is not met if when testing for disease, there
+was contamination between the samples.</li>
+</ul></li>
+</ul></li>
+<li>Binomial distribution depends on <strong>two parameters</strong>.
+<ul>
+<li><strong><span class="math inline">\(n\)</span></strong>: the number
+of trials (or number of individuals)</li>
+<li><strong><span class="math inline">\(\pi\)</span></strong>: the
+probability of a sucess in ONE trial
+<ul>
+<li>If <span class="math inline">\(\pi\)</span>, the probability of
+success, is close to 1, then the number of successes out of <span
+class="math inline">\(n\)</span> trials will tend to be large, or closer
+to <span class="math inline">\(n\)</span>.</li>
+<li>If <span class="math inline">\(\pi\)</span>, the probability of
+success, is near 0, <span class="math inline">\(Y\)</span> will tend to
+be closer to 0.</li>
+</ul></li>
+</ul></li>
+<li>Binomial random variable, <strong><span
+class="math inline">\(Y\)</span></strong>: the count of the number of
+successes in <span class="math inline">\(n\)</span> trials
+<ul>
+<li>the values that Y can be are 0, 1, 2, …, n.</li>
+</ul></li>
+</ul>
+<p><br><br><br><br><br></p>
+</div>
+<div id="estimate-the-value-of-pi-for-a-binomial-random-variable."
+class="section level3">
+<h3>3. Estimate the value of <span class="math inline">\(\pi\)</span>
+for a binomial random variable.</h3>
+<ul>
+<li>The mean of binomial random variable <span
+class="math inline">\(Y\)</span> with parameters <span
+class="math inline">\(n\)</span> and <span
+class="math inline">\(\pi\)</span> is <span
+class="math inline">\(E(Y)=n\pi\)</span>.</li>
+<li>To estimate the <strong>proportion of success</strong> for a
+binomial random variable, we can use the <strong>sample
+proportion</strong> of the observed sample.
+<ul>
+<li>To estimate <span class="math inline">\(\pi\)</span>, we would
+divide the observed number of successes, <span
+class="math inline">\(y\)</span>, by <span
+class="math inline">\(n\)</span>.</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+E\left(\frac{Y}{n}\right)=\pi
+\]</span></p>
+<ul>
+<li>So the estimate of <span class="math inline">\(\pi\)</span>, which
+we will call <span class="math inline">\(p\)</span>, is</li>
+</ul>
+<p><span class="math display">\[
+p=\frac{y}{n}
+\]</span></p>
+<p>where <span class="math inline">\(y\)</span> is the observed number
+of successes in the <span class="math inline">\(n\)</span> trials.</p>
+<p><br><br></p>
+<div
+id="example-estimate-the-proportion-of-individuals-who-have-diabetes"
+class="section level4">
+<h4>3.1 Example: estimate the proportion of individuals who have
+diabetes</h4>
+<p>It is known that the proportion of adults in the US who have diabetes
+is 0.094 or 9.4%. If we take a random sample of 750 of US adults and
+determine the number who have diabetes, <span
+class="math inline">\(Y\)</span>, then <span
+class="math inline">\(Y\)</span> has a binomial distribution with <span
+class="math inline">\(n\)</span>=750 and <span
+class="math inline">\(\pi\)</span>=0.094. Suppose we did not know the
+value of <span class="math inline">\(\pi\)</span>, we would estimate it
+with the observed number of individuals out of the 750 who have
+diabetes, <span class="math inline">\(y\)</span> divided by 750; the
+estimate would be <span class="math inline">\(p\)</span> = <span
+class="math inline">\(y\)</span> / 750.</p>
+<p>1&gt; Let’s simulate this experiment by using the <code>R</code>
+function <strong><code>rbinom()</code></strong> to get a sample size 750
+from the population</p>
+<pre class="r"><code>(y &lt;- rbinom(1, 750, 0.094))</code></pre>
+<pre><code>## [1] 68</code></pre>
+<p>2&gt; Based on the sample above, the estimate of <span
+class="math inline">\(\pi\)</span> would be <span
+class="math inline">\(p\)</span> = 80 / 750 = 0.107. What happens if we
+take another sample from the population of size 750?</p>
+<pre class="r"><code>(y1 &lt;- rbinom(1, 750, 0.094))</code></pre>
+<pre><code>## [1] 73</code></pre>
+<ul>
+<li>Based on this another sample, the estimate of <span
+class="math inline">\(\pi\)</span> would be <span
+class="math inline">\(p\)</span>=72/750=0.096.
+<ul>
+<li>The two estimates are not equal to each other.</li>
+<li>It means the estimate <span class="math inline">\(p\)</span> varies
+from sample to sample</li>
+<li>Can we characterize this variability? (<em>Yes, by
+simulation</em>)</li>
+</ul></li>
+</ul>
+<p>Perform a simulation where we get 5000 samples of size 750 each and
+for each sample, we compute the value of <span
+class="math inline">\(p\)</span>.</p>
+<ul>
+<li>Use <strong><code>rbinom()</code></strong> and store the 5000
+simulated estimates of <span class="math inline">\(p\)</span> in a
+vector called <code>props</code>. We then will take a look at the first
+125 values in the vector.</li>
+</ul>
+<pre class="r"><code>props &lt;- rbinom(5000, 750, 0.094) / 750
+round(props[1:125], 3)</code></pre>
+<pre><code>##   [1] 0.108 0.116 0.079 0.092 0.068 0.093 0.079 0.084 0.085 0.077 0.093 0.088
+##  [13] 0.089 0.097 0.064 0.099 0.093 0.084 0.093 0.085 0.093 0.065 0.100 0.081
+##  [25] 0.081 0.065 0.103 0.117 0.101 0.087 0.072 0.097 0.100 0.099 0.089 0.076
+##  [37] 0.097 0.097 0.084 0.107 0.087 0.099 0.117 0.089 0.081 0.104 0.091 0.091
+##  [49] 0.083 0.096 0.096 0.097 0.111 0.100 0.105 0.091 0.107 0.093 0.105 0.104
+##  [61] 0.100 0.105 0.108 0.091 0.091 0.091 0.083 0.119 0.120 0.101 0.101 0.101
+##  [73] 0.103 0.088 0.093 0.089 0.088 0.100 0.093 0.115 0.097 0.085 0.091 0.091
+##  [85] 0.084 0.081 0.104 0.089 0.100 0.107 0.079 0.100 0.095 0.099 0.089 0.112
+##  [97] 0.113 0.100 0.096 0.104 0.097 0.084 0.092 0.095 0.089 0.095 0.085 0.083
+## [109] 0.093 0.101 0.091 0.104 0.079 0.105 0.085 0.097 0.108 0.079 0.083 0.113
+## [121] 0.087 0.085 0.085 0.096 0.101</code></pre>
+<ul>
+<li>Looking at the values, they all seem relatively close to the real
+value of <strong>0.094</strong>.</li>
+<li>Looking at the data through the graph is better.</li>
+</ul>
+<pre class="r"><code>hist(props, 
+    xlab = &quot;sample proportion with diabetes&quot;,
+    ylab = &quot;probability&quot;,
+    freq = FALSE,
+    main = &quot;Estimated Sampling Distribution&quot;)
+lines(density(props,adjust=2.5),col=&quot;red&quot;,lwd=4)</code></pre>
+<p><img src="stat_seminar_wk02-2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<ul>
+<li>The plot shows both the histogram and the density plot.
+<ul>
+<li>We could use this information in our simulated sampling distribution
+to determine the likelihood of getting various estimates for the
+proportion of individuals with diabetes based on a random sample of size
+750.</li>
+</ul></li>
+</ul>
+<p><br><br></p>
+<div
+id="what-is-the-probability-of-getting-an-estimate-for-the-proportion-with-diabetes-between-0.084-and-0.104-inclusive"
+class="section level5">
+<h5>What is the probability of getting an estimate for the proportion
+with diabetes between 0.084 and 0.104, inclusive?</h5>
+<pre class="r"><code>sum((props &gt;= 0.084 &amp; props &lt;= 0.104)) / 5000</code></pre>
+<pre><code>## [1] 0.6844</code></pre>
+<blockquote>
+<p>It would be quite likely to get estimates in this range. This can
+also be seen from <strong>the sampling distribution for the estimated
+proportion</strong>.</p>
+</blockquote>
+<p><br><br></p>
+</div>
+<div
+id="what-is-the-probability-of-getting-an-estimate-for-the-proportion-with-diabetes-that-is-more-than-0.02-from-the-true-value"
+class="section level5">
+<h5>What is the probability of getting an estimate for the proportion
+with diabetes that is more than 0.02 from the true value?</h5>
+<blockquote>
+<p>the interval is (0.094-0.02, 0.094+0.02) = (0.074, 0.114)</p>
+</blockquote>
+<pre class="r"><code>(answer &lt;- sum((props &lt; 0.074 | props &gt; 0.114 )) / 5000)</code></pre>
+<pre><code>## [1] 0.061</code></pre>
+<p>Hence we can see that with a sample of 750, we are unlikely to get a
+estimate that is more than 0.061 from the real proportion.</p>
+<p><br><br></p>
+</div>
+</div>
+<div id="estimators-as-random-variables" class="section level4">
+<h4>3.2 Estimators as random variables</h4>
+<ul>
+<li>a function of random variables is a random variable.</li>
+<li>Thus, <strong>estimators</strong> are <strong>random
+variables</strong>.</li>
+<li>As such, we can compute the <strong>expected value</strong> and the
+<strong>variance</strong> of the <strong>estimator</strong>.</li>
+</ul>
+<p><br><br></p>
+</div>
+<div
+id="mean-and-variance-of-estimate-the-proportion-of-success-for-a-binomial-random-variable"
+class="section level4">
+<h4>3.3 Mean and Variance of estimate the proportion of success for a
+binomial random variable</h4>
+<p><br><br></p>
+<div id="mean" class="section level5">
+<h5>1) mean</h5>
+<ul>
+<li><p>The estimator of the probability of success for the binomial
+distribution is itself a <strong>random variable</strong>.</p></li>
+<li><p>The number of observed successes in the sample, <span
+class="math inline">\(y\)</span>, is described by the random variable
+<span class="math inline">\(Y\)</span>, which is binomial.</p></li>
+<li><p>So our estimator is the random variable,
+<strong><em>Y/n</em></strong>, we can compute its expected
+value.</p></li>
+</ul>
+<p><span class="math display">\[
+E(p)=E\left(\frac{Y}{n}\right)=\frac{E(Y)}{n}=\frac{n \pi}{n}=\pi
+\]</span></p>
+<ul>
+<li><p>So the <strong>expected value of the estimator</strong> is in
+this case equal to the <strong>true parameter value</strong>.</p>
+<ul>
+<li>The estimators that have this property are called
+<strong>unbiased</strong>.</li>
+</ul></li>
+<li><p>The <strong>expected value of this estimator</strong> does
+<strong>NOT</strong> depend on the <strong>sample size</strong> <span
+class="math inline">\(n\)</span> upon which the estimate is based.</p>
+<ul>
+<li>It means that on average, the <strong>estimate</strong> will equal
+<strong>the value we are trying to estimate</strong>.</li>
+</ul></li>
+</ul>
+<p><br><br></p>
+</div>
+<div id="variance" class="section level5">
+<h5>2) variance</h5>
+<ul>
+<li>The <strong>variance of the estimator decreases as the sample size
+increases</strong>.
+<ul>
+<li>In order to ensure that the estimate of the true proportion is
+closer to the true proportion, one needs a larger sample size.</li>
+</ul></li>
+</ul>
+<blockquote>
+<p><strong>We want estimators that have the mean as close as possible to
+the true value and smallest variance.</strong></p>
+</blockquote>
+<p><br><br><br><br><br></p>
+</div>
+</div>
+</div>
+<div
+id="sampling-distribution-for-the-estimate-of-a-binomial-proportion"
+class="section level3">
+<h3>4. Sampling distribution for the estimate of a binomial
+proportion</h3>
+<ul>
+<li>A basic statistical fact is that <strong>sample statistics</strong>
+(e.g. the <strong>sample proportion</strong>, <span
+class="math inline">\(p = y / n\)</span> , where y is the number of
+successes in a sample of size n) vary from sample to sample.</li>
+<li>The key idea is that a statistic associated with a random sample is
+a random variable.</li>
+<li>We can relate the variability of a statistic based on a random
+sample to the variability of the random variable on which the statistic
+is based.</li>
+</ul>
+<blockquote>
+<p>The probability function (PMF or PDF) of a statistic is called the
+<strong><code>sampling distribution of the statistic</code></strong>.</p>
+</blockquote>
+<p><br><br></p>
+<div id="characteristics-of-the-sample-proportion"
+class="section level4">
+<h4>4.1 Characteristics of the <strong>Sample Proportion</strong></h4>
+<ul>
+<li><p>If a random variable <span class="math inline">\(Y\)</span> is
+binomial</p>
+<ul>
+<li>with a probability of success of <span
+class="math inline">\(\pi\)</span>,</li>
+<li>the <strong>sampling distribution of the sample proportion</strong>
+(of samples of size <span class="math inline">\(n\)</span>) :</li>
+</ul>
+<p>has population mean <span class="math inline">\(\pi\)</span> and
+population variance <span
+class="math inline">\(\frac{\pi(1-\pi)}{n}\)</span>.</p></li>
+</ul>
+<blockquote>
+<p><strong>Standard error</strong>: the standard deviation of the
+sampling distribution.</p>
+</blockquote>
+<ul>
+<li><p>Looking at the <strong>sampling distribution of the sample
+proportion, <span class="math inline">\(p\)</span></strong>, its shape
+is similar to a <strong>binomial distribution</strong>.</p></li>
+<li><p>If the binomial distribution of <span
+class="math inline">\(Y\)</span> with parameters <span
+class="math inline">\(\pi\)</span> and <span
+class="math inline">\(n\)</span> can only take the values of <span
+class="math inline">\(y\)</span> = 0, 1, 2, . . . , <span
+class="math inline">\(n\)</span>, then the distribution of the sample
+proportion can only take on the values <span
+class="math inline">\(p\)</span> = 0/<span
+class="math inline">\(n\)</span>(= 0), 1/<span
+class="math inline">\(n\)</span>, 2/<span
+class="math inline">\(n\)</span>, . . . , <span
+class="math inline">\(n\)</span>/<span
+class="math inline">\(n\)</span>(= 1).</p></li>
+<li><p>The probabilities map one-to-one with the probability</p></li>
+</ul>
+<p><span class="math display">\[
+\begin{array}{c}\operatorname{Pr}(Y=0)=\operatorname{Pr}(p=0) \\
+\operatorname{Pr}(Y=1)=\operatorname{Pr}(p=1 / n) \\
+\operatorname{Pr}(Y=2)=\operatorname{Pr}(p=2 / n) \\
+\operatorname{Pr}(Y=3)=\operatorname{Pr}(p=3 / n) \\  \ldots \\
+\operatorname{Pr}(Y=n)=\operatorname{Pr}(p=1)\end{array}
+\]</span></p>
+<ul>
+<li>So <strong>the sampling distribution for the sample proportion <span
+class="math inline">\(p\)</span>=<span class="math inline">\(y\)</span>
+/ <span class="math inline">\(n\)</span></strong> has
+<strong>binomial</strong> probabilities but <strong>with different
+outcome values</strong>.</li>
+</ul>
+<blockquote>
+<p>If <span class="math inline">\(Y\)</span> has a binomial distribution
+with a probability of success of <span
+class="math inline">\(\pi\)</span>, then the sample proportion <span
+class="math inline">\(p\)</span>, based on a random sample of <span
+class="math inline">\(n\)</span> observations (or trials), has a
+binomial distribution with men <span class="math inline">\(\pi\)</span>
+and variance <span class="math inline">\(\pi(1-\pi)\)</span> /<span
+class="math inline">\(n\)</span>. <br>In order to compute these values,
+we need to use <strong><code>binom()</code></strong> with <span
+class="math inline">\(Y\)</span> and <span
+class="math inline">\(n\)</span> to get the probabilities.</p>
+</blockquote>
+<p><br><br></p>
+<div
+id="what-is-the-probability-of-getting-an-estimate-for-the-proportion-with-diabetes-between-0.084-and-0.104-inclusive-1"
+class="section level5">
+<h5>What is the probability of getting an estimate for the proportion
+with diabetes between 0.084 and 0.104, inclusive?</h5>
+<blockquote>
+<p>First, we need to determine the <span
+class="math inline">\(y\)</span> values that corresponds to 0.084 and
+0.104, respectively. <span class="math inline">\(\operatorname{Pr}(63
+\leq Y \leq 78)\)</span></p>
+</blockquote>
+<pre class="r"><code>(answer2 &lt;- round(pbinom(78, 750, 0.094) - pbinom(62, 750, 0.094), 3))</code></pre>
+<pre><code>## [1] 0.683</code></pre>
+<blockquote>
+<p>Second, compare 0.683 to the below:</p>
+</blockquote>
+<pre class="r"><code>sum((props &gt;= 0.084 &amp; props &lt;= 0.104)) / 5000</code></pre>
+<pre><code>## [1] 0.6844</code></pre>
+<p><br><br></p>
+</div>
+<div
+id="what-is-the-probability-of-getting-an-estimate-for-the-proportion-with-diabetes-that-is-more-than-0.02-from-the-true-value-1"
+class="section level5">
+<h5>What is the probability of getting an estimate for the proportion
+with diabetes that is more than 0.02 from the true value?</h5>
+<blockquote>
+<ul>
+<li>The interval is (0.094-0.02, 0.094+0.02) = (0.074, 0.114)</li>
+<li>Pr(<span class="math inline">\(p\)</span>&lt;0.074) + Pr(<span
+class="math inline">\(p\)</span>&gt;0.114) To translate to the values
+for Y, we multiply the <span class="math inline">\(p\)</span> by 750.
+This results in <span
+class="math inline">\(y=750\times0.074=55.5\)</span> and <span
+class="math inline">\(y=750\times0.114=85.5\)</span>. Thus, we want to
+use a binomial distribution to compute <span
+class="math inline">\(Pr(Y&lt;55.5)=Pr(Y\le 55)\)</span> and compute
+<span class="math inline">\(Pr(Y&gt;85.5)=Pr(Y\ge86)\)</span>. Recall
+that to compute <span class="math inline">\(Pr(Y\ge86)\)</span> the
+relationship <span
+class="math inline">\(Pr(Y\ge86)=1-Pr(Y\le85)\)</span>.</li>
+</ul>
+</blockquote>
+<pre class="r"><code>(answer3 &lt;- round(pbinom(55,750,0.094) + (1 - pbinom(85,750,0.094)), 3))</code></pre>
+<pre><code>## [1] 0.06</code></pre>
+<blockquote>
+<p>Compare 0.06 to the below:</p>
+</blockquote>
+<pre class="r"><code>(answer4 &lt;- sum((props &lt; 0.074 | props &gt; 0.114 )) / 5000)</code></pre>
+<pre><code>## [1] 0.061</code></pre>
+<blockquote>
+<p><strong>The values from the simulated sampling distribution for <span
+class="math inline">\(p\)</span> yields values close to the values from
+the exact sampling distribution</strong>.</p>
+</blockquote>
+<p><br><br><br></p>
+<p><a href="toc.html">&lt; Back to Syllabus</a></p>
+<p><br><br><br></p>
+</div>
+</div>
+</div>
+
+<br><br>
+<footer>
+  <p class="copyright text-muted" align="center">Copyright &copy; 2024 Cold Spring Harbor Laboratory</p>
+</footer>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

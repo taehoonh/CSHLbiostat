@@ -4,12 +4,14 @@ title: ""
 
 <br><br>
 
+<link rel="stylesheet" href="styles.css" type="text/css">
+<link rel="stylesheet" href="site_libs/academicons-1.9.1/css/academicons.min.css"/>
+
 <p align="center">
 <img src="images/biostat_core_logo.png" alt="logo" style="width:85%; border:0.5px solid; margin-right: 20px" align="center">
 </p>
 <br>
 
-**Overview**
 
 Welcome to the Biostatistics Core at CSHL, where we are dedicated to enhancing the research quality and output of our faculty, staff, and students. Offering a broad spectrum of statistical consulting services, we are equipped with advanced tools like R, Python, and the latest PASS 2024 software to ensure versatile and capable support for all your statistical needs.
 

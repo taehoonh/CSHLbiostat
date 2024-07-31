@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Week 5-2. MLE for Normal, Asymptotics, Central Limit Theorem
+(CLM), and Asymptotic properties of the MLE</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Cold Spring Harbor Laboratory Biostatistics</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="services.html">Services</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Training
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="biostatistics_course.html">Biostatistics Course</a>
+    </li>
+    <li>
+      <a href="toc.html">Intro to Statistics</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="communication.html">Communication</a>
+</li>
+<li>
+  <a href="https://github.com/taehoonh/CSHLbiostat">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<!-- <link rel="stylesheet" href="styles.css" type="text/css"> -->
+<p><br><br><br></p>
+<p><a href="toc.html">&lt; Back to Syllabus</a></p>
+<p><br><br><br></p>
+<div id="review-of-normal-distribution" class="section level3">
+<h3>1. Review of Normal Distribution</h3>
+<ul>
+<li>The standard normal probability density function (PDF) is:</li>
+</ul>
+<p><span class="math display">\[
+f_{X}(x)=\frac{1}{\sqrt{2 \pi \sigma^{2}}} e^{-\frac{(x-\mu)^{2}}{2
+\sigma^{2}}} \quad-\infty&lt;x&lt;\infty
+\]</span></p>
+<ul>
+<li>The plot of a standard normal probability density function (PDF)
+is:</li>
+</ul>
+<pre class="r"><code>curve(dnorm, from=-4, to=4, ylab=&quot;PDF&quot;, main=&quot;PDF of a standard normal&quot;, lwd=4, col=2)</code></pre>
+<p><img src="stat_seminar_wk05-2_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><br></p>
+<div id="cumulative-distribution-function-cdf" class="section level4">
+<h4>1.1 Cumulative Distribution Function (CDF)</h4>
+<ul>
+<li>The <strong>cumulative distribution function</strong> is deﬁned as
+the probability that a random variable is less or equal than a certain
+number.</li>
+</ul>
+<p><span class="math display">\[
+F_{X}(x)=\operatorname{Pr}(X \leq x)
+\]</span></p>
+<ul>
+<li>Note the relation between the CDF and the PDF</li>
+</ul>
+<p><span class="math display">\[
+F_{X}(x)=\int_{X \leq x} f_{X}(x) d x
+\]</span></p>
+<ul>
+<li>The plot of a standard normal cumulative density function (CDF)
+is:</li>
+</ul>
+<pre class="r"><code>curve(qnorm, from=0, to=1, ylab=&quot;CDF&quot;, main=&quot;CDF of a standard normal&quot;, lwd=4, col=2)</code></pre>
+<p><img src="stat_seminar_wk05-2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><br></p>
+</div>
+<div id="expected-value-and-variance-of-the-normal-distribution"
+class="section level4">
+<h4>1.2 Expected Value and Variance of the normal distribution</h4>
+<ul>
+<li>The expected value of the normal distribution is</li>
+</ul>
+<p><span class="math display">\[
+E[X]=\mu
+\]</span></p>
+<ul>
+<li>and its variance is</li>
+</ul>
+<p><span class="math display">\[
+\operatorname{Var}(X)=\sigma^{2}
+\]</span></p>
+<ul>
+<li>There are an infinite number of differnt normal distributions.</li>
+<li>However, all normal distributions can be transformed to a standard
+normal distribution.
+<ul>
+<li>Suppose <span class="math inline">\(Y~N(\mu, \sigma)\)</span>.</li>
+<li>Then if for each value of <span class="math inline">\(Y\)</span>, we
+subtract the mean and divide by the standard deviation.</li>
+<li>The resulting distribution is a standard normal distribution.</li>
+</ul></li>
+<li>Specifically, a standard normal is</li>
+</ul>
+<p><span class="math display">\[
+Z=\frac{Y-\mu}{\sigma}
+\]</span></p>
+<ul>
+<li>Then <span class="math inline">\(Z~N(0, 1)\)</span>.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="example-converting-to-a-standard-normal"
+class="section level4">
+<h4>1.3 Example: Converting to a standard normal</h4>
+<ul>
+<li>Suppose that <span class="math inline">\(Y~N(20, 4)\)</span></li>
+<li>Suppose we take a random sample of size 1000 from this
+distribution</li>
+</ul>
+<pre class="r"><code>y &lt;- rnorm(1000, 20, 4)
+
+hist(y, freq = F, col = &quot;lemonchiffon&quot;,
+     xlab = &quot;data values&quot;,
+     breaks = 30,
+     ylab = &quot;density&quot;,
+     main = &quot;N(20,4) Distribution&quot;)
+lines(density(y, bw=1.5), col=&quot;midnightblue&quot;, lwd=4)</code></pre>
+<p><img src="stat_seminar_wk05-2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<ul>
+<li>Then let’s define a new random variable, <span
+class="math inline">\(Z\)</span>, where we subtract the mean of <span
+class="math inline">\(Y\)</span> and divide by the standard deviation of
+<span class="math inline">\(Y\)</span>.</li>
+</ul>
+<pre class="r"><code>z &lt;- (y - mean(y)) / sd(y)
+
+mean(z) %&gt;% round(3) # 0</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>sd(z) %&gt;% round(3) # 1</code></pre>
+<pre><code>## [1] 1</code></pre>
+<ul>
+<li>Thus, we can check that it is a standard normal.</li>
+<li>Another way to check is to compare the quantiles of the new
+distribution to that of a standard normal.
+<ul>
+<li>Use <code>qqnorm()</code> function in <code>R</code>: this function
+plots a sample against a normal distribution.</li>
+<li>Another function is <code>qqline()</code>: this adds a line to the
+normal Q-Q plot. This line makes it a lot easier to evaluate if there is
+a clear deviation from normality.</li>
+<li>The closer all points lie to the line, the closer the distribution
+of the sample comes to the normal distribution.</li>
+</ul></li>
+</ul>
+<pre class="r"><code>par(mfrow=c(1,2))
+qqnorm(y, main=&quot;QQ normal plot of Y&quot;) 
+qqline(y, col=&quot;orchid&quot;, lwd = 4)
+
+qqnorm(z, main=&quot;QQ normal plot of Z&quot;)
+qqline(z, col=&quot;orchid&quot;, lwd=4)</code></pre>
+<p><img src="stat_seminar_wk05-2_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<ul>
+<li>The quantiles from the <span class="math inline">\(N(0, 1)\)</span>
+distribution are on the <span class="math inline">\(x\)</span>-axis and
+the quantiles of the sample are on the <span
+class="math inline">\(y\)</span>-axis.</li>
+<li><span class="math inline">\(Y\)</span> is a normal distribution but
+not a standard normal because its quantiles are not the same as those on
+the <span class="math inline">\(x\)</span>-axis.</li>
+<li><span class="math inline">\(Z\)</span> is a standard normal because
+the quantiles for <span class="math inline">\(Z\)</span> are exactly the
+same as for the standard normal distribution (i.e. values on the <span
+class="math inline">\(y\)</span>-axis same as those on the <span
+class="math inline">\(x\)</span>-axis).</li>
+</ul>
+<p><br><br></p>
+</div>
+</div>
+<div id="the-maximum-likelihood-estimator-for-the-normal"
+class="section level3">
+<h3>2. The Maximum Likelihood Estimator for the Normal</h3>
+<ul>
+<li>The <strong>Maximum Likelihood Estimator (MLE)</strong> is the
+parameter value that maximizes the likelihood (or equivalently the
+log-likelihood) function.</li>
+</ul>
+<div id="bias-of-normal-estimates" class="section level4">
+<h4>2.1 Bias of normal estimates</h4>
+<ul>
+<li>The MLE estimate of <span class="math inline">\(\mu\)</span> of a
+normal random variable is</li>
+</ul>
+<p><span class="math display">\[
+L\left(\mu, \sigma^{2}\right)=\prod_{i=1}^{n}\left(\frac{1}{\sqrt{2 \pi
+\sigma^{2}}}\right) \exp \left\{-\frac{\left(x_{i}-\mu\right)^{2}}{2
+\sigma^{2}}\right\}
+\]</span></p>
+<ul>
+<li>And the log-likelihood is:</li>
+</ul>
+<p><span class="math display">\[
+l\left(\mu, \sigma^{2}\right)=-n \log (\sqrt{2 \pi})-\frac{n}{2} \log
+\sigma^{2}-\frac{1}{2 \sigma^{2}}
+\sum_{i=1}^{n}\left(x_{i}-\mu\right)^{2}
+\]</span></p>
+<ul>
+<li>As <span class="math inline">\(\theta\)</span> is two-dimensional in
+this case, we have to solve the system of partial derivatives with
+respect to <span class="math inline">\(\mu\)</span> and <span
+class="math inline">\(\sigma\)</span>. We start with <span
+class="math inline">\(\mu\)</span>:</li>
+</ul>
+<p><span class="math display">\[
+\frac{\partial l\left(\mu, \sigma^{2}\right)}{\partial
+\mu}=\frac{1}{\sigma^{2}}\left(n \mu-\sum_{i=1}^{n} x_{i}\right)=0
+\]</span></p>
+<ul>
+<li>which implies:</li>
+</ul>
+<p><span class="math display">\[
+\hat{\mu}=\frac{1}{n} \sum_{i=1}^{n} x_{i}
+\]</span></p>
+<ul>
+<li>We can see take the expected value of <span
+class="math inline">\(\hat\mu\)</span>.</li>
+</ul>
+<p><span class="math display">\[
+\hat{\mu}=\frac{1}{n} \sum_{i=1}^{n} x_{i}
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned} E(\hat{\mu}) &amp;=E\left(\frac{1}{n} \sum_{i=1}^{n}
+x_{i}\right) \\ &amp;=\frac{1}{n} E\left(\sum_{i=1}^{n} x_{i}\right) \\
+&amp;=\frac{1}{n} n \\ &amp;=\mu \end{aligned}
+\]</span></p>
+<ul>
+<li><p>Since E(<span class="math inline">\(\hat\mu\)</span>) = <span
+class="math inline">\(\mu\)</span>, the MLE estimate, the sample mean,
+is an <strong>unbiased estimate</strong> of <span
+class="math inline">\(\mu\)</span>.</p></li>
+<li><p>Hence, the MLE of the variance of a normal random variable is
+biased because</p></li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned} E\left[\hat{\sigma}^{2}\right] &amp;=E\left[\frac{1}{n}
+\sum_{i=1}^{n}\left(X_{i}-\hat{\mu}\right)^{2}\right] \\
+&amp;=\frac{1}{n} E\left[\sum_{i=1}^{n} X_{i}^{2}-n \hat{\mu}^{2}\right]
+\\ &amp;=\frac{1}{n}\left[\sum_{i=1}^{n} E\left[X_{i}^{2}\right]-n
+E\left[\hat{\mu}^{2}\right]\right] \\
+&amp;=\frac{1}{n}\left[\sum_{i=1}^{n}\left(\sigma^{2}+E\left[X_{i}\right]^{2}\right)-n\left(\frac{\sigma^{2}}{n}+E[\hat{\mu}]^{2}\right)\right]
+\\ &amp;=\frac{1}{n}\left[n \sigma^{2}+n \mu^{2}-\sigma^{2}-n
+\mu^{2}\right] \\ &amp;=\frac{n-1}{n} \sigma^{2} \end{aligned}
+\]</span></p>
+<p><br></p>
+</div>
+<div id="hatmu-is-consistent" class="section level4">
+<h4>2.2 <span class="math inline">\(\hat\mu\)</span> is consistent</h4>
+<ul>
+<li><span class="math inline">\(\hat\mu\)</span>’s variance.</li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned} \operatorname{Var}(\hat{\mu})
+&amp;=\operatorname{Var}\left[\frac{1}{n} \sum_{i=1}^{n} X_{i}\right] \\
+&amp;=\frac{1}{n^{2}} \sum_{i=1}^{n}
+\operatorname{Var}\left(X_{i}\right) \\ &amp;=\frac{1}{n^{2}}\left[n
+\sigma^{2}\right]=\frac{\sigma^{2}}{n} \end{aligned}
+\]</span></p>
+<ul>
+<li>Now assume that we have a sample <span
+class="math inline">\(X_1\)</span>, <span
+class="math inline">\(\cdots\)</span>, <span
+class="math inline">\(X_n\)</span> of i.i.d. random variable’s with
+<span class="math inline">\(X_i\)</span>~<span
+class="math inline">\(N(\mu, \sigma)\)</span>.</li>
+<li>Also assume that we know <span
+class="math inline">\(\sigma=1\)</span> and we want to estimate <span
+class="math inline">\(\mu\)</span>.</li>
+<li>Then the estimator is consistent.</li>
+</ul>
+<p><span class="math display">\[
+\hat{\mu}=\frac{1}{n} \sum_{i=1}^{n} X_{i} \sim N\left(\mu,
+\frac{\sigma^{2}}{n}\right)
+\]</span></p>
+<ul>
+<li>We can write</li>
+</ul>
+<p><span class="math display">\[
+\operatorname{Pr}(|\hat{\mu}-\mu|&gt;\varepsilon)=\operatorname{Pr}\left(\frac{|\hat{\mu}-\mu|}{\sigma
+/ \sqrt{n}}&gt;\frac{\sqrt{n} \varepsilon}{\sigma}\right)
+\]</span></p>
+<ul>
+<li>Because of the <strong>symmetry of the Gaussian
+distribution</strong>, this becomes:</li>
+</ul>
+<p><span class="math display">\[
+\operatorname{Pr}(|\hat{\mu}-\mu|&gt;\varepsilon)=2
+\operatorname{Pr}\left(Z&gt;\frac{\sqrt{n}
+\varepsilon}{\sigma}\right)=2\left(1-\Phi\left(\frac{\sqrt{n}
+\varepsilon}{\sigma}\right)\right) \rightarrow 0
+\]</span></p>
+<ul>
+<li><code>R</code>
+<ul>
+<li>As the sample size increases, the <strong>probability that the value
+of <span class="math inline">\(\hat\mu\)</span> differs from <span
+class="math inline">\(\mu\)</span> goes to zero</strong>.</li>
+<li>As the sample size increases, the sample mean becomes a better
+estimate (more precise) of <span class="math inline">\(\mu\)</span>, the
+population mean of a normal distribution.</li>
+</ul></li>
+</ul>
+<pre class="r"><code>N &lt;- seq(3, 30)
+epsilon &lt;- 1
+sigma &lt;- 1
+
+pr &lt;- sapply(N, function(n) {
+    2 * (1 - pnorm((sqrt(n) * epsilon)/sigma))
+})
+
+df &lt;- data.frame(N = N, Prob = pr)
+
+library(ggplot2)
+ggplot(df, aes(x = N, y = Prob)) +
+    geom_line(size = 2) +
+    geom_hline(yintercept = 0, col=2) +
+    theme_bw()</code></pre>
+<p><img src="stat_seminar_wk05-2_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><br><br></p>
+</div>
+</div>
+<div id="asymptotics" class="section level3">
+<h3>3. Asymptotics</h3>
+<ul>
+<li>The <strong>asymptotics</strong> refers to **the behavior of
+statistics as the sample size, <span class="math inline">\(n\)</span>,
+approaches infinity.</li>
+<li>Often we talk about <strong>asymptotical properties</strong> of
+statistics (e.g. estimators).</li>
+<li><strong>Asymptotic properties</strong> offer a way to learn
+approximations of the behavior of the estimators in <strong>finite
+sample sizes</strong>.</li>
+<li>It is however important to understand that <strong>these are
+approximations</strong> and that <strong>asymptotic properties do not
+give any assurances about finite sample performances</strong>.
+<ul>
+<li>We already used asymptotic results when we define the consistency of
+an estimator.</li>
+</ul></li>
+</ul>
+<p><br><br></p>
+</div>
+<div id="the-central-limit-theorem-clt" class="section level3">
+<h3>4. The Central Limit Theorem (CLT)</h3>
+<ul>
+<li>The Central Limit Theorem (CLT) allows us to define the asymptotic
+distribution of estimators.</li>
+</ul>
+<p><br></p>
+<div id="distribution-of-the-mean-of-gaussian-normal-random-variable."
+class="section level4">
+<h4>4.1 Distribution of the mean of Gaussian (Normal) random
+variable.</h4>
+<ul>
+<li>If <span class="math inline">\(X_1\)</span>, <span
+class="math inline">\(\cdots\)</span>, <span
+class="math inline">\(X_n\)</span> are i.i.d. <span
+class="math inline">\(N(\mu, \sigma)\)</span> the sample mean is</li>
+</ul>
+<p><span class="math display">\[
+\hat{\mu} \sim N\left(\mu, \frac{\sigma^{2}}{n}\right)
+\]</span></p>
+<ul>
+<li>This is an <strong>exact</strong> rather than asymptotic
+result.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="distribution-of-the-mean-of-gamma-random-variables"
+class="section level4">
+<h4>4.2 Distribution of the mean of Gamma random variables</h4>
+<ul>
+<li>If <span class="math inline">\(X_1\)</span>, <span
+class="math inline">\(\cdots\)</span>, <span
+class="math inline">\(X_n\)</span> are a set of i.i.d. <span
+class="math inline">\(Gamma(\alpha, \beta)\)</span> random
+variables.</li>
+<li>The Gamma PDF is</li>
+</ul>
+<p><span class="math display">\[
+f_{X}(x)=\frac{x^{\alpha-1}}{\Gamma(\alpha) \beta^{\alpha}} \exp
+\left\{-\frac{x}{\beta}\right\}, \quad x&gt;0, \alpha, \beta&gt;0
+\]</span></p>
+<ul>
+<li>The log-likelihood is</li>
+</ul>
+<p><span class="math display">\[
+l(\alpha, \beta)=(\alpha-1) \sum_{i=1}^{n} \log x_{i}-n \log
+\Gamma(\alpha)-n \alpha \log \beta-\frac{1}{\beta} \sum_{i=1}^{n} x_{i}
+\]</span></p>
+<ul>
+<li>The MLE for <span class="math inline">\(\beta\)</span> is easy to
+compute:</li>
+</ul>
+<p><span class="math display">\[
+\frac{\partial l(\alpha, \beta)}{\partial \beta}=\frac{-n
+\alpha}{\beta}+\frac{1}{\beta^{2}} \sum_{i=1}^{n} x_{i}=0
+\]</span></p>
+<ul>
+<li>However, there is no close-form solution for <span
+class="math inline">\(\hat\sigma\)</span>.</li>
+<li>We can show that the expected value and the variance of a Gamma
+random variables are:</li>
+</ul>
+<p><span class="math display">\[
+\begin{array}{c}E\left[X_{i}\right]=\mu=\alpha \beta \\
+\operatorname{Var}\left(X_{i}\right)=\sigma^{2}=\alpha
+\beta^{2}\end{array}
+\]</span></p>
+<ul>
+<li>The shape of a Gamma distribution:
+<ul>
+<li>There are two Gamma parameters: <span
+class="math inline">\(\alpha\)</span> and <span
+class="math inline">\(\beta\)</span>.</li>
+<li>e.g. Gamma(2, 1) random variable.</li>
+<li>plotting the PDF for the function:</li>
+</ul></li>
+</ul>
+<pre class="r"><code>p &lt;- dgamma(seq(0, 10, by=0.1), shape = 2, scale = 1)
+plot(p, xlab = &quot;x&quot;, ylab = &quot;f(x)&quot;, main = &quot;PDF of Gamma&quot;, type=&#39;l&#39;, col = 2, lwd=4)</code></pre>
+<p><img src="stat_seminar_wk05-2_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<ul>
+<li>The shape of the gamma distribution is
+<strong>right-skewed</strong>.</li>
+<li>The sample mean of the gamma distribution (i.e. <span
+class="math inline">\(X_1\)</span>, <span
+class="math inline">\(\cdots\)</span>, <span
+class="math inline">\(X_n\)</span>, i.i.d. Gamma(<span
+class="math inline">\(\alpha\)</span>, <span
+class="math inline">\(\beta\)</span>))
+<ul>
+<li>The mean and variance of the sample mean are valid independent of
+the distribution of the <span class="math inline">\(X_i\)</span>’s, so
+we know that</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+\begin{array}{l}E[\hat{\mu}]=\mu=\alpha \beta \\
+\operatorname{Var}(\hat{\mu})=\frac{\alpha \beta^{2}}{n}\end{array}
+\]</span></p>
+<ul>
+<li>But we do not know its distribution.</li>
+<li>Thus, We can simulate many Gamma samples and empirically look at the
+distribution.</li>
+</ul>
+<pre class="r"><code>muhat &lt;- replicate(1000, 
+                   { 
+                     x &lt;- rgamma(10, shape = 2, scale = 1) 
+                     mean(x) 
+                    })
+mean(muhat)</code></pre>
+<pre><code>## [1] 1.991642</code></pre>
+<pre class="r"><code>var(muhat)</code></pre>
+<pre><code>## [1] 0.2043863</code></pre>
+<ul>
+<li>The distribution of the sample mean is:</li>
+</ul>
+<pre class="r"><code>hist(muhat, col=&quot;lemonchiffon&quot;, freq=F,
+     breaks=30, ylim=c(0, 1),
+     main=&quot;Sample Distribution Sample Mean Gamma&quot;,
+     xlab=&quot;sample mean&quot;, ylab=&quot;density&quot;)
+lines(density(muhat), col=2, lwd=4)</code></pre>
+<p><img src="stat_seminar_wk05-2_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<ul>
+<li>The sampling distribution of the sample means appears to be a normal
+distribution.</li>
+<li>We can look at this more closely by comparing it to standard normal
+distribution using the <code>qqnorm()</code> function.
+<ul>
+<li>First we “standardize” the sample values by subtracting the mean and
+dividing by the standard deviation.</li>
+</ul></li>
+</ul>
+<pre class="r"><code>muhat.z &lt;- (muhat - mean(muhat))/sd(muhat) 
+qqnorm(muhat.z) 
+qqline(muhat.z, col=2, lwd=4)</code></pre>
+<p><img src="stat_seminar_wk05-2_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<ul>
+<li>This shows that the normal is a fairly good approximation of the
+sampling distribution of the sample means, but it is not perfect.</li>
+<li>The tails of the distribution are a bit heavy and there is slight
+skewness to the data.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="distribution-of-the-sample-mean-of-the-gamma-for-increasing-n"
+class="section level4">
+<h4>4.3 Distribution of the sample mean of the Gamma for increasing
+<span class="math inline">\(n\)</span></h4>
+<ul>
+<li>When <span class="math inline">\(n=5\)</span></li>
+</ul>
+<pre class="r"><code>muhat5 &lt;- replicate(1000, 
+                    {
+                     x &lt;- rgamma(5, shape = 2, scale = 1) 
+                     mean(x) 
+                     }) 
+muhat5.z &lt;- (muhat5 - mean(muhat5))/sd(muhat5) 
+qqnorm(muhat5.z, main = &quot;n = 5&quot;) 
+qqline(muhat5.z, col=2, lwd=4)</code></pre>
+<p><img src="stat_seminar_wk05-2_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<ul>
+<li>When <span class="math inline">\(n=30\)</span></li>
+</ul>
+<pre class="r"><code>muhat30 &lt;- replicate(1000, 
+                     {
+                      x &lt;- rgamma(30, shape = 2, scale = 1) 
+                      mean(x) 
+                      }) 
+muhat30.z &lt;- (muhat30 - mean(muhat30))/sd(muhat30) 
+qqnorm(muhat30.z, main = &quot;n = 30&quot;) 
+qqline(muhat30.z, col=2, lwd=4)</code></pre>
+<p><img src="stat_seminar_wk05-2_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<ul>
+<li>When <span class="math inline">\(n=100\)</span></li>
+</ul>
+<pre class="r"><code>muhat100 &lt;- replicate(1000, 
+                      {
+                       x &lt;- rgamma(100, shape = 2, scale = 1) 
+                       mean(x)
+                       })
+muhat100.z &lt;- (muhat100 - mean(muhat100))/sd(muhat100) 
+qqnorm(muhat100.z, main = &quot;n = 100&quot;) 
+qqline(muhat100.z, col=2, lwd=4)</code></pre>
+<p><img src="stat_seminar_wk05-2_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<ul>
+<li>Now, let’s look at the density of each of these different sample
+sizes superimposed(겹쳐진) on the same graph.</li>
+</ul>
+<pre class="r"><code>plot(density(muhat5), col=1, lwd=4, 
+     xlim=c(0,4), ylim=c(0,3), 
+     xlab = &quot;sample mean&quot;, ylab=&quot;density&quot;,
+     main=&quot;sampling distribution for different n&quot;)
+lines(density(muhat), col=2, lty=2, lwd=5) 
+lines(density(muhat30), col=3, lty=3, lwd=5)
+lines(density(muhat100), col=4, lty=4, lwd=5)</code></pre>
+<p><img src="stat_seminar_wk05-2_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<ul>
+<li>Conclusion: It appears that each of the sampling distributions have
+an approximately normal shape, with each shape becoming more normal as
+the sample size increases.</li>
+<li>Each distribution appears to be centered about about the same place,
+at the mean of the underlying gamma distribution, which is 2.</li>
+<li>Also, the spread of each distribution becomes more narrow as the
+sample size increases.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="the-central-limit-theorem-clt-1" class="section level4">
+<h4>4.4 The Central Limit Theorem (CLT)</h4>
+<ul>
+<li>If <span class="math inline">\(X_1\)</span>, <span
+class="math inline">\(\cdots\)</span>, <span
+class="math inline">\(X_n\)</span> are independent, identically
+distributed (i.i.d.) random variables with mean <span
+class="math inline">\(\mu\)</span> and variacne <span
+class="math inline">\(\sigma^2\)</span>, both finite.</li>
+<li>Then, for any constant <span class="math inline">\(z\)</span>,</li>
+</ul>
+<p><span class="math display">\[
+\lim _{n \rightarrow \infty}
+\operatorname{Pr}\left(\frac{\hat{\mu}-\mu}{\sigma / \sqrt{n}} \leq
+z\right)=\Phi(z)
+\]</span></p>
+<ul>
+<li>In other words, the asmptotic distribution of the estimator of the
+mean is:</li>
+</ul>
+<p><span class="math display">\[
+\hat{\mu} \sim N\left(\mu, \frac{\sigma^{2}}{n}\right)
+\]</span></p>
+<ul>
+<li>Importantly, the result holds(i.e. it is the same result) even when
+replacing the standard error with its estimate.</li>
+<li>We say that <strong><span class="math inline">\(\hat\mu\)</span>
+converges in distribution to a normal</strong>.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="the-clt-in-computer-age-statistics" class="section level4">
+<h4>4.5 The CLT in computer-age statistics</h4>
+<p>The CLT is one of the most important results in statistics. In
+classic statistics, one had very few alternatives to the CLT to compute
+the distribution of the sample mean, because of the lack of close-form
+solutions for most of the distributions. Now, we can often obtain better
+ﬁnite sample approximations through <strong>simulation-based
+methods</strong>, such as <strong>bootstrapping</strong>.</p>
+<p><br><br></p>
+</div>
+</div>
+<div id="asymptotic-properties-of-the-mle" class="section level3">
+<h3>5. Asymptotic properties of the MLE</h3>
+<p><br></p>
+<div id="consistency" class="section level4">
+<h4>5.1 Consistency</h4>
+<ul>
+<li>Under certain regularity conditions, the MLE is a <strong>consistent
+estimator</strong>, i.e.,</li>
+</ul>
+<p><span class="math display">\[
+\lim _{n \rightarrow \infty}
+\operatorname{Pr}\left(\left|\hat{\theta}_{n}-\theta\right|&gt;\varepsilon\right)=0
+\]</span></p>
+<p><br></p>
+</div>
+<div id="asmptotic-normality" class="section level4">
+<h4>5.2 Asmptotic normality</h4>
+<ul>
+<li>Under certain regularity conditions, the MLE is **asymptotically
+normal, i.e.,</li>
+</ul>
+<p><span class="math display">\[
+\hat{\theta}_{n} \rightarrow N\left(\theta, \frac{1}{n I(\theta)}\right)
+\]</span></p>
+<p>where <span class="math inline">\(I(\theta)\)</span> is the
+<em>Fisher information</em>,</p>
+<p><span class="math display">\[
+I(\theta)=-E_{\theta}\left[\frac{\partial^{2}}{\partial \theta^{2}}
+l(\theta)\right]
+\]</span></p>
+<ul>
+<li>This implies that the MLE is <strong>asymptotically
+unbiased</strong>.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="example-mle-of-sigma2-of-a-gaussian-random-variable"
+class="section level4">
+<h4>5.3 Example: MLE of <span class="math inline">\(\sigma^2\)</span> of
+a Gaussian random variable</h4>
+<ul>
+<li>The MLE of <span class="math inline">\(\sigma^2\)</span> is</li>
+</ul>
+<p><span class="math display">\[
+\hat{\sigma}^{2}=\frac{1}{n}
+\sum_{i=1}^{n}\left(X_{i}-\hat{\mu}\right)^{2}
+\]</span></p>
+<ul>
+<li>This is a biased estimator:</li>
+</ul>
+<p><span class="math display">\[
+E\left[\hat{\sigma^{2}}\right]=\frac{n-1}{n} \sigma^{2}
+\]</span></p>
+<ul>
+<li><code>R</code>: simulation that the estimator is
+<strong>asymptotically unbiased and normally distributed</strong>.</li>
+</ul>
+<pre class="r"><code>mle &lt;- function(x) {
+    mean((x - mean(x))^2) 
+    }
+
+get_dist &lt;- function(n) {
+    sigmahat &lt;- replicate(1000, {
+        x &lt;- rnorm(n, mean=5, sd=2)
+        mle(x)
+        })
+    return(sigmahat)
+}
+
+ns &lt;- seq(10, 500, by=10)
+dist &lt;- lapply(ns, get_dist) 
+bias &lt;- sapply(dist, function(x) mean(x) - 4)</code></pre>
+<ul>
+<li>The plot of the amount of bias as a function of sample size</li>
+</ul>
+<pre class="r"><code>plot(ns, bias, type = &#39;l&#39;, lwd=3, xlab=&quot;n&quot;, ylab=&quot;Bias&quot;) 
+abline(h=0, col=2, lty=2, lwd=3)</code></pre>
+<p><img src="stat_seminar_wk05-2_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<ul>
+<li>When <span class="math inline">\(n\)</span>=10 and <span
+class="math inline">\(n\)</span>=500, check the density and the
+QQ-normal plot of each.</li>
+<li><span class="math inline">\(n\)</span>=10</li>
+</ul>
+<pre class="r"><code>par(mfrow=c(1,2))
+plot(density(dist[[1]], bw = 1), main=&quot;n = 10&quot;, xlab=&quot;sigmahat values&quot;, ylab=&quot;density&quot;, col=&quot;green&quot;, lwd=4) 
+qqnorm((dist[[1]] - mean(dist[[1]]))/sd(dist[[1]]), main=&quot;n = 10&quot;) 
+qqline((dist[[1]] - mean(dist[[1]]))/sd(dist[[1]]), col=&quot;orchid&quot;, lwd=4)</code></pre>
+<p><img src="stat_seminar_wk05-2_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<ul>
+<li><span class="math inline">\(n\)</span>=500</li>
+</ul>
+<pre class="r"><code>par(mfrow=c(1,2)) 
+plot(density(dist[[50]], bw = 1), main=&quot;n = 500&quot;, xlab=&quot;sigmahat values&quot;, ylab=&quot;density&quot;, col=&quot;green&quot;, lwd=4) 
+qqnorm((dist[[50]] - mean(dist[[50]]))/sd(dist[[50]]), main=&quot;n = 500&quot;) 
+qqline((dist[[50]] - mean(dist[[50]]))/sd(dist[[50]]), col=&quot;orchid&quot;, lwd=4)</code></pre>
+<p><img src="stat_seminar_wk05-2_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<ul>
+<li>Conclusion: As the sample size increases, the sampling distribution
+of <span class="math inline">\(\sigma^2\)</span> becomes more normally
+distributed.
+<ul>
+<li>Thus, this estimate is asmptotically unbiased and normally
+distributed.</li>
+</ul></li>
+</ul>
+<p><br><br><br></p>
+<p><a href="toc.html">&lt; Back to Syllabus</a></p>
+<p><br><br><br></p>
+</div>
+</div>
+
+<br><br>
+<footer>
+  <p class="copyright text-muted" align="center">Copyright &copy; 2024 Cold Spring Harbor Laboratory</p>
+</footer>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
