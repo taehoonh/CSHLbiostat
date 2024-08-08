@@ -4,15 +4,17 @@ navbar:
   title: Cold Spring Harbor Laboratory Biostatistics
   right:
   - text: Services
-    href: services.html
+    menu:
+    - text: Basic Services
+      href: services.html
+    - text: Grant Application Help
+      href: grant_application.html
   - text: Training
     menu: 
     - text: "Biostatistics Course (Summer)"
       href: biostatistics_course.html
     - text: "Intro to Biostatistics with R"
       href: toc.html
-  - text: Communication
-    href: communication.html
   - icon: fa-github
     href: https://github.com/taehoonh/CSHLbiostat
 output:
