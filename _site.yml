@@ -9,6 +9,8 @@ navbar:
       href: services.html
     - text: Grant Application Help
       href: grant_application.html
+    - text: Research Collaboration
+      #href: collaboration.html
   - text: Training
     menu: 
     - text: "Biostatistics Course (Summer)"
